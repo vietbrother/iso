@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<hibernate-configuration>  
+    <session-factory>  
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password"></property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/iso</property>
+        <property name="format_sql">true</property>
+        <property name="show_sql">true</property>
+        <property name="connection.pool_size">5</property>
+<!--        <property name="hibernate.current_session_context_class">thread</property>
+        <property name="hibernate.id.new_generator_mappings">false</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>-->
+
+        <!-- here all entities will come -->
+        <mapping class="com.iso.dashboard.dto.Student"/>
+        <!--<mapping class="com.iso.dashboard.dto.User"/>-->
+        <mapping class="com.iso.dashboard.dto.Users"/>
+         
+    </session-factory>  
+</hibernate-configuration> 
+
+
+<!--<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">root</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/hibnatedb</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
+        <property name="show_sql">true</property> 
+        <property name="connection.pool_size">1</property>
+         
+        <mapping class="com.hib.entities.Student"></mapping>
+ 
+    </session-factory>
+</hibernate-configuration>-->
