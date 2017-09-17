@@ -12,6 +12,8 @@ import com.iso.dashboard.dto.DashboardNotification;
 import com.iso.dashboard.event.DashboardEvent.CloseOpenWindowsEvent;
 import com.iso.dashboard.event.DashboardEvent.NotificationsCountUpdatedEvent;
 import com.iso.dashboard.event.DashboardEventBus;
+import com.iso.dashboard.ui.MostUsedFunctionUI;
+import com.iso.dashboard.utils.BundleUtils;
 import com.iso.dashboard.view.dashboard.DashboardEdit.DashboardEditListener;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
@@ -67,7 +69,7 @@ public final class DashboardView extends Panel implements View,
 
         root.addComponent(buildHeader());
 
-        root.addComponent(buildSparklines());
+        root.addComponent(buildMostUsedFunc());
 
         Component content = buildContent();
         root.addComponent(content);
@@ -83,17 +85,21 @@ public final class DashboardView extends Panel implements View,
         });
     }
 
-    private Component buildSparklines() {
-        CssLayout sparks = new CssLayout();
-        sparks.addStyleName("sparks");
-        sparks.setWidth("100%");
-        Responsive.makeResponsive(sparks);
+    private Component buildMostUsedFunc() {
+        CssLayout clMostUsedFunc = new CssLayout();
+        clMostUsedFunc.addStyleName("sparks");
+        clMostUsedFunc.setWidth("100%");
+        Responsive.makeResponsive(clMostUsedFunc);
+
+        VerticalLayout vertical = new VerticalLayout();
+        vertical.setMargin(true);
+        
 
         
-        Table s = new Table();
-        sparks.addComponent(s);
+        vertical.addComponent(new MostUsedFunctionUI());
 
-        return sparks;
+        clMostUsedFunc.addComponent(vertical);
+        return clMostUsedFunc;
     }
 
     private Component buildHeader() {
