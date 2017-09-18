@@ -28,6 +28,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -65,14 +66,33 @@ public class UserMngtView extends Panel implements View {
 //        setSpacing(false);
         setSizeFull();
         VerticalLayout root = new VerticalLayout();
+        root.setCaption(BundleUtils.getStringCas("menu.userMngt"));
         root.setSizeFull();
         root.setSpacing(false);
         root.addStyleName("dashboard-view");
 //        root.addStyleName("transactions");
-        setContent(root);
+//        setContent(root);
         Responsive.makeResponsive(root);
 
         Component content = buildContent();
+        TabSheet tabSheet = new TabSheet();
+//        tabSheet.setCaption(BundleUtils.getStringCas("menu.userMngt"));
+        tabSheet.setStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
+        tabSheet.setStyleName(ValoTheme.TABSHEET_ICONS_ON_TOP);
+        setContent(tabSheet);
+        tabSheet.addComponent(root);
+//        tabSheet.setStyleName(ValoTheme.LABEL_COLORED);
+//        tabSheet.setStyleName(ValoTheme.LABEL_BOLD);
+//
+//        VerticalLayout title = new VerticalLayout();
+//        Responsive.makeResponsive(title);
+//        title.setCaption(BundleUtils.getStringCas("menu.userMngt"));
+//        title.setMargin(false);
+//        title.setSpacing(false);
+//        title.addComponent(content);
+//        tabSheet.addComponent(title);
+//
+//        tabSheet.addComponent(content);
         root.addComponent(content);
         root.setExpandRatio(content, 1);
 
@@ -85,11 +105,11 @@ public class UserMngtView extends Panel implements View {
         contenPanel.addStyleName("dashboard-panels");
         Responsive.makeResponsive(contenPanel);
 
-        Label titleLabel = new Label(BundleUtils.getStringCas("menu.userMngt"));
-        titleLabel.setSizeUndefined();
-        titleLabel.addStyleName(ValoTheme.LABEL_H1);
-        titleLabel.addStyleName(ValoTheme.LABEL_NO_MARGIN);
-        contenPanel.addComponent(titleLabel);
+//        Label titleLabel = new Label(BundleUtils.getStringCas("menu.userMngt"));
+//        titleLabel.setSizeUndefined();
+//        titleLabel.addStyleName(ValoTheme.LABEL_H1);
+//        titleLabel.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+//        contenPanel.addComponent(titleLabel);
         contenPanel.addComponent(buildToolbar());
         contenPanel.addComponent(buildResultLayout());
 

@@ -3,7 +3,136 @@
 @import "dashboard";
 
 .dashboard {
-  // Output the actual theme selectors
-  @include addons;
-  @include dashboard;
+    // Output the actual theme selectors
+    @include addons;
+    @include dashboard;
 }
+
+/*.dashboard .v-tabsheet-icons-on-top  > .v-tabsheet-tabcontainer .v-caption {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    line-height: 1.8;
+}    
+.dashboard .v-tabsheet-tabcontainer {
+    position: relative;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 0.7%;
+}*/
+
+//Table
+.v-table-header td{
+    font-family: tahoma;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #18908c;
+    //background-color: #4C91CA;
+    height: 35px;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    color: white;
+    text-align: center;
+
+}
+
+.v-table-cell-content{
+    font-family: tahoma;
+    font-size: 15px;
+    height: 20px;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    text-align: left;
+    padding-left: 2px;
+}
+/*.v-table-header {
+    font-weight: bold;
+    //color: #58595D;
+    color: #8c8c8c;
+    font-family: arial, sans-serif;
+    font-size: 13px;
+
+}
+.v-table-header-cell {
+    alignment-adjust: central;
+    font-family: tahoma;
+    font-size: 13px;
+    font-weight: normal;
+    background-color: #fff;
+    //background-color: #4C91CA;
+    height: 25px;
+    border-bottom: 1px solid #ccc;
+
+    background-image: url("img/btn-bg.png");
+}
+
+.v-table-row-drag-bottom td.v-table-cell-content {
+    border-bottom: 2px solid #197de1;
+    height: 25px;
+}
+.v-table-caption-container, .v-table-header-drag {
+    padding: 12px 12px 11px;
+    border-left: 1px solid #d4d4d4;
+    //background-color: #4C91CA;
+    //color:white;
+    background-color: #FAFAFA;
+    color: #8c8c8c;
+
+    background-image: url("img/btn-bg.png");
+    alignment-adjust: central;
+    min-height: 25px;
+    font-family: roboto medium;
+    font-size: 13px;
+    font-weight: bold;
+}
+//Cot STT
+.v-table-sort-indicator {
+    background-color: #4C91CA;
+    background-image: url("img/btn-bg.png");
+    alignment-adjust: central;
+}
+//Dau dong header
+.v-table-header-cell-rowheader {
+    alignment-adjust: center;
+    background-color: #4C91CA;
+    background-image: url("img/btn-bg.png");
+    font-family: tahoma;
+    font-size: 13px;
+    font-weight: normal;
+    height: 25px;
+}
+.v-table-compact .v-table-caption-container, .v-table-compact .v-table-header-drag, .v-table-small .v-table-caption-container, .v-table-small .v-table-header-drag {
+    padding-top: 6px;
+    padding-bottom: 8px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+//order cot
+.v-table-header-cell-asc {
+    background-color: #fff;
+    //background-color: #4C91CA;
+    background-image: url("img/btn-bg.png");
+    alignment-adjust: central;
+    font-family: tahoma;
+    font-size: 13px;
+    font-weight: normal;
+    border-bottom: 1px solid #ccc;
+}
+.v-table-header-cell-desc {
+    background-color: #fff;
+    //background-color: #4C91CA;
+    background-image: url("img/btn-bg.png");
+    alignment-adjust: central;
+    font-family: tahoma;
+    font-size: 13px;
+    font-weight: normal;
+    border-bottom: 1px solid #ccc;
+}
+
+.v-selected .v-table-cell-content {
+    color: #000000;
+    background-color: #D9E3E8;
+    border: none;
+}*/

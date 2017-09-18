@@ -19,7 +19,7 @@ import org.hibernate.Session;
  *
  * @author VIET_BROTHER
  */
-public class UserDAO {
+public class UserDAO extends BaseDAO {
 
     private static UserDAO dao;
 
@@ -34,8 +34,7 @@ public class UserDAO {
         List<Users> listUsers = new ArrayList<>();
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
+            session = getSession();
             String sql = "FROM Users u "
                     + (DataUtil.isNullOrEmpty(username) ? "" : ("where LOWER(u.username) like ? "))
                     + "ORDER BY u.username ASC";
@@ -44,14 +43,9 @@ public class UserDAO {
                 query.setParameter(0, "%" + username.toLowerCase() + "%");
             }
             listUsers = (List<Users>) query.list();
-            session.getTransaction().commit();
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
 
         return listUsers;
@@ -61,22 +55,14 @@ public class UserDAO {
         ResultDTO res = new ResultDTO(Constants.FAIL, "");
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
+            session = getSession();
             int id = (Integer) session.save(p);
-            session.getTransaction().commit();
+            session.flush();
             res.setId(String.valueOf(id));
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
             res.setMessage(e.getMessage());
-            if (session != null) {
-                session.getTransaction().rollback();
-            }
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
         return res;
     }
@@ -85,8 +71,7 @@ public class UserDAO {
         ResultDTO res = new ResultDTO(Constants.FAIL, "");
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
+            session = getSession();
             Users u = (Users) session.get(Users.class, Integer.valueOf(newData.getId()));
             u.setUsername(newData.getUsername());
             u.setFirstName(newData.getFirstName());
@@ -96,18 +81,11 @@ public class UserDAO {
             u.setPhone(newData.getPhone());
             u.setRole(newData.getRole());
             session.delete(u);
-            session.getTransaction().commit();
+            session.flush();
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
             res.setMessage(e.getMessage());
-            if (session != null) {
-                session.getTransaction().rollback();
-            }
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
         return res;
     }
@@ -116,22 +94,14 @@ public class UserDAO {
         ResultDTO res = new ResultDTO(Constants.FAIL, "");
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
+            session = getSession();
             Users u = (Users) session.get(Users.class, Integer.valueOf(id));
             session.delete(u);
-            session.getTransaction().commit();
+            session.flush();
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
             res.setMessage(e.getMessage());
             e.printStackTrace();
-            if (session != null) {
-                session.getTransaction().rollback();
-            }
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
         return res;
     }
@@ -139,26 +109,18 @@ public class UserDAO {
     public Users getUsersById(String id) {
         ResultDTO res = new ResultDTO(Constants.FAIL, "");
         Session session = null;
-        Users u = null;
+        Users users = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
-            u = (Users) session.get(Users.class, Integer.valueOf(id));
-            session.delete(u);
+            session = getSession();
+            users = (Users) session.get(Users.class, Integer.valueOf(id));
+            session.delete(users);
             session.getTransaction().commit();
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
             res.setMessage(e.getMessage());
-            if (session != null) {
-                session.getTransaction().rollback();
-            }
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
-        return u;
+        return users;
     }
 
 }
