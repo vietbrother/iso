@@ -6,7 +6,7 @@
 package com.iso.dashboard.dao;
 
 import com.iso.dashboard.dto.ResultDTO;
-import com.iso.dashboard.dto.Users;
+import com.iso.dashboard.dto.Organization;
 import com.iso.dashboard.utils.Constants;
 import com.iso.dashboard.utils.DataUtil;
 import com.iso.dashboard.utils.HibernateUtil;
@@ -19,47 +19,55 @@ import org.hibernate.Session;
  *
  * @author VIET_BROTHER
  */
-public class UserDAO extends BaseDAO {
+public class OrganizationDAO extends BaseDAO {
 
-    private static UserDAO dao;
+    private static OrganizationDAO dao;
 
-    public static UserDAO getInstance() {
+    public static OrganizationDAO getInstance() {
         if (dao == null) {
-            dao = new UserDAO();
+            dao = new OrganizationDAO();
         }
         return dao;
     }
 
-    public List<Users> listUsers(String username) {
-        List<Users> listUsers = new ArrayList<>();
+    public List<Organization> listOrganization(String id, String parentId) {
+        List<Organization> listOrganization = new ArrayList<>();
         Session session = null;
         try {
             session = getSession();
-            String sql = "FROM Users u "
-                    + (DataUtil.isNullOrEmpty(username) ? "" : ("where LOWER(u.username) like ? "))
-                    + "ORDER BY u.username ASC";
+            session.beginTransaction();
+            String sql = "FROM Organization org where 1 = 1 "
+                    + (DataUtil.isNullOrEmpty(id) ? "" : ("and org.id = ? "))
+                    + (DataUtil.isNullOrEmpty(parentId) ? "" : ("and org.parentId = ? "))
+                    + "ORDER BY org.id ASC";
             Query query = session.createQuery(sql);
-            if (!DataUtil.isNullOrEmpty(username)) {
-                query.setParameter(0, "%" + username.toLowerCase() + "%");
+            int i = 0;
+            if (!DataUtil.isNullOrEmpty(id)) {
+                query.setParameter(i, Integer.valueOf(id));
+                i++;
             }
-            listUsers = (List<Users>) query.list();
+            if (!DataUtil.isNullOrEmpty(parentId)) {
+                query.setParameter(i, Integer.valueOf(parentId));
+            }
+            listOrganization = (List<Organization>) query.list();
 
+            session.getTransaction().commit();
+            session.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return listUsers;
+        return listOrganization;
     }
 
-    public ResultDTO addUsers(Users p) {
+    public ResultDTO addOrganization(Organization addObj) {
         ResultDTO res = new ResultDTO(Constants.FAIL, "");
         Session session = null;
         try {
             session = getSession();
             session.beginTransaction();
-            int id = (Integer) session.save(p);
+            int id = (Integer) session.save(addObj);
             //session.flush();
-//            getTransaction().commit();
             session.getTransaction().commit();
             session.close();
             res.setId(String.valueOf(id));
@@ -71,45 +79,43 @@ public class UserDAO extends BaseDAO {
         return res;
     }
 
-    public ResultDTO updateUsers(Users newData) {
+    public ResultDTO updateOrganization(Organization newData) {
         ResultDTO res = new ResultDTO(Constants.FAIL, "");
         Session session = null;
         try {
             session = getSession();
             session.beginTransaction();
-            Users u = (Users) session.get(Users.class, Integer.valueOf(newData.getId()));
-            u.setUsername(newData.getUsername());
-            u.setFirstName(newData.getFirstName());
-            u.setLastName(newData.getLastName());
-            u.setEmail(newData.getEmail());
-            u.setBirthDay(newData.getBirthDay());
-            u.setPhone(newData.getPhone());
-            u.setRole(newData.getRole());
-            session.update(u);
+            Organization updateObj = (Organization) session.get(Organization.class, Integer.valueOf(newData.getId()));
+            updateObj.setName(newData.getName());
+            updateObj.setCode(newData.getCode());
+            updateObj.setDescription(newData.getDescription());
+            updateObj.setValue(newData.getValue());
+
+            session.update(updateObj);
             //session.flush();
-//            getTransaction().commit();
             session.getTransaction().commit();
             session.close();
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
             res.setMessage(e.getMessage());
+            HibernateUtil.getSessionFactory().openSession();
+
         }
         return res;
     }
 
-    public ResultDTO removeUsers(String id) {
+    public ResultDTO removeOrganization(String id) {
         ResultDTO res = new ResultDTO(Constants.FAIL, "");
         Session session = null;
         try {
             session = getSession();
             session.beginTransaction();
-            Users u = (Users) session.get(Users.class, Integer.valueOf(id));
-            session.delete(u);
-            //session.flush();
-//            getTransaction().commit();
+            Organization org = (Organization) session.get(Organization.class, Integer.valueOf(id));
+            session.delete(org);
             session.getTransaction().commit();
             session.close();
+//            session.flush();
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
             res.setMessage(e.getMessage());
@@ -118,14 +124,14 @@ public class UserDAO extends BaseDAO {
         return res;
     }
 
-    public Users getUsersById(String id) {
+    public Organization getOrganizationById(String id) {
         ResultDTO res = new ResultDTO(Constants.FAIL, "");
         Session session = null;
-        Users users = null;
+        Organization org = null;
         try {
             session = getSession();
             session.beginTransaction();
-            users = (Users) session.get(Users.class, Integer.valueOf(id));
+            org = (Organization) session.get(Organization.class, Integer.valueOf(id));
             session.getTransaction().commit();
             session.close();
             res.setKey(Constants.SUCCESS);
@@ -133,7 +139,7 @@ public class UserDAO extends BaseDAO {
             e.printStackTrace();
             res.setMessage(e.getMessage());
         }
-        return users;
+        return org;
     }
 
 }

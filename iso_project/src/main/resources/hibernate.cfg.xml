@@ -18,19 +18,19 @@ and open the template in the editor.
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/iso</property>
         <property name="format_sql">true</property>
         <property name="show_sql">true</property>
-        <property name="connection.pool_size">5</property>
+        <property name="connection.pool_size">20</property>
 	
         <property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property> 
-        <property name="hibernate.c3p0.min_size">5</property>
-        <property name="hibernate.c3p0.max_size">200</property> 
-        <property name="hibernate.c3p0.max_statements">50</property>
+        <property name="hibernate.c3p0.min_size">1</property>
+        <property name="hibernate.c3p0.max_size">20</property> 
+        <property name="hibernate.c3p0.max_statements">100</property>
         <property name="hibernate.c3p0.acquire_increment">1</property>
         <!-- new values for fixing the DB issues with Jboss7 -->
-        <property name="hibernate.c3p0.idle_test_period">40</property> 
-        <property name="hibernate.c3p0.timeout">30</property>
+        <property name="hibernate.c3p0.idle_test_period">0</property> 
+        <property name="hibernate.c3p0.timeout">1000</property>
         <!-- new properties that fix the DB issues we have in Jboss 7 -->
-        <property name="hibernate.c3p0.unreturnedConnectionTimeout">400</property>
-        <property name="hibernate.c3p0.debugUnreturnedConnectionStackTraces">true</property>
+        <!--<property name="hibernate.c3p0.unreturnedConnectionTimeout">400</property>-->
+        <!--<property name="hibernate.c3p0.debugUnreturnedConnectionStackTraces">true</property>-->
         <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
 
 <!--        <property name="hibernate.current_session_context_class">thread</property>
@@ -41,6 +41,7 @@ and open the template in the editor.
         <mapping class="com.iso.dashboard.dto.Student"/>
         <!--<mapping class="com.iso.dashboard.dto.User"/>-->
         <mapping class="com.iso.dashboard.dto.Users"/>
+        <mapping class="com.iso.dashboard.dto.Organization"/>
          
     </session-factory>  
 </hibernate-configuration> 

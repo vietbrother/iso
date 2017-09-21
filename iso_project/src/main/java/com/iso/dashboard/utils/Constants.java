@@ -30,7 +30,9 @@ public class Constants {
     public static final String SUCCESS = "SUCCESS";
     public static final String FAIL = "FAIL";
     public static final String DEACTIVE = "0";
+    public static final String DEACTIVE_STR = "DEACTIVE";
     public static final String ACTIVE = "1";
+    public static final String ACTIVE_STR = "ACTIVE";
 
     public static final String ITEM_ID = "itemId";
     public static final String ITEM_NAME = "itemName";
