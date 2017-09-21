@@ -136,3 +136,215 @@
     background-color: #D9E3E8;
     border: none;
 }*/
+
+
+/**tree */
+.v-tree {
+	position: relative;
+	white-space: nowrap;
+}
+
+.v-tree:focus {
+	outline: none;
+}
+
+.v-tree-node:before {
+	content: "";
+	position: absolute;
+	display: inline-block;
+	z-index: 3;
+	width: 1.9em;
+	height: 32px;
+	cursor: pointer;
+	background: red;
+	opacity: 0;
+}
+
+.v-ie8 .v-tree-node:before {
+	position: static;
+	margin-left: -1.9em;
+	vertical-align: top;
+	content: "\f0da";
+	font-family: ThemeIcons;
+	text-align: center;
+	background: transparent;
+}
+
+.v-ie8 .v-tree-node {
+	padding-left: 1.9em;
+}
+
+.v-tree-node-caption {
+	height: 32px;
+	line-height: 31px;
+	overflow: hidden;
+	white-space: nowrap;
+	vertical-align: top;
+}
+
+.v-tree-node-caption > div {
+	display: inline-block;
+	width: 100%;
+	position: relative;
+	z-index: 2;
+}
+
+.v-tree-node-caption > div:before {
+	content: "\f0da";
+	font-family: ThemeIcons;
+	display: inline-block;
+	width: 0.5em;
+	text-align: center;
+	margin: 0 0.6em 0 0.8em;
+	-webkit-transition: all 100ms;
+	-moz-transition: all 100ms;
+	transition: all 100ms;
+}
+
+.v-ie8 .v-tree-node-caption > div:before {
+	display: none;
+}
+
+.v-tree-node-caption span {
+	padding-right: 32px;
+	cursor: pointer;
+	display: inline-block;
+	width: 100%;
+}
+
+.v-ie .v-tree-node-caption span {
+	width: auto;
+}
+
+.v-tree-node-caption .v-icon {
+	padding-right: 0;
+	width: auto;
+	min-width: 1em;
+}
+
+.v-tree-node-caption:after {
+	content: "";
+	display: block;
+	vertical-align: top;
+	position: absolute;
+	z-index: 1;
+	left: 0;
+	margin-top: -32px;
+	width: 100%;
+	height: 32px;
+	border-radius: 4px;
+	opacity: 0;
+	-webkit-transition: opacity 120ms;
+	-moz-transition: opacity 120ms;
+	transition: opacity 120ms;
+}
+
+.v-ie8 .v-tree-node-caption:after {
+	content: none;
+}
+
+.v-ie8 .v-tree-node-caption {
+	display: inline-block;
+}
+
+.v-tree-node-expanded > .v-tree-node-caption > div:before {
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	transform: rotate(90deg);
+	content: "\f0da";
+	font-family: ThemeIcons;
+}
+
+.v-ie8 .v-tree-node-expanded:before {
+	content: "\f0d7";
+	font-family: ThemeIcons;
+}
+
+.v-tree-node-leaf:before, .v-tree-node-leaf > .v-tree-node-caption > div:before {
+	visibility: hidden;
+}
+
+.v-tree-node-focused:after {
+	opacity: 1;
+	border: 1px solid #fff;
+}
+
+.v-ie8 .v-tree-node-focused {
+	outline: 1px dotted #fff;
+}
+
+/*.v-tree-node-selected {
+	color: #1a1a1a;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.v-tree-node-selected:after {f
+	opacity: 1;
+	background: #fff;
+	border: none;
+}*/
+.v-tree-node-selected {
+    color: #ecf2f8;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
+}
+
+.v-tree-node-selected:after {
+	opacity: 1;
+	background-color: #197de1;
+	background-image: -webkit-linear-gradient(top, #1b87e3 2%, #166ed5 98%);
+	background-image: linear-gradient(to bottom,#1b87e3 2%, #166ed5 98%);
+	border: none;
+}
+
+.v-ie8 .v-tree-node-selected {
+	background: #fff;
+}
+
+.v-tree-node-children {
+	padding-left: 21px;
+}
+
+.v-ie8 .v-tree-node-children {
+	padding-left: 0;
+}
+
+.v-tree-node-drag-top:before, .v-tree-node-drag-bottom:after, .v-tree-node-drag-bottom.v-tree-node-dragfolder.v-tree-node-expanded > .v-tree-node-children:before {
+	content: "\2022";
+	display: block;
+	position: absolute;
+	height: 2px;
+	width: 100%;
+	background: #fff;
+	font-size: 36px;
+	line-height: 2px;
+	color: #fff;
+	text-indent: -5px;
+	text-shadow: 0 0 1px #1a61b7, 0 0 1px #1a61b7;
+	opacity: 1;
+	visibility: visible;
+}
+
+.v-tree-node-drag-bottom.v-tree-node-dragfolder.v-tree-node-expanded:after {
+	content: none;
+}
+
+.v-tree-node-caption-drag-center {
+	-webkit-box-shadow: 0 0 0 2px #fff;
+	box-shadow: 0 0 0 2px #fff;
+	position: relative;
+	border-radius: 4px;
+}
+
+.v-ie8 .v-tree-node-caption-drag-center {
+	outline: 2px solid #fff;
+}
+
+.v-ff .v-tree-node-drag-top:before, .v-ff .v-tree-node-drag-bottom:after {
+	line-height: 1px;
+}
+
+.v-ie8 .v-tree-node-drag-top:before, .v-ie8 .v-tree-node-drag-bottom:after {
+	line-height: 0;
+}

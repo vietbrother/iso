@@ -13,6 +13,7 @@ public enum DashboardViewType {
 
     DASHBOARD("dashboard", DashboardView.class, FontAwesome.HOME, true),
     USER_MNGT("userMngt", UserMngtView.class, FontAwesome.USERS, true),
+    ORGANIZATION_MNGT("organizationMngt", OrganizationMngtView.class, FontAwesome.SITEMAP, true),
     SALES("sales", SalesView.class, FontAwesome.BAR_CHART_O, false),
     REPORTS("reports", ReportsView.class, FontAwesome.FILE_TEXT_O, true),
     SCHEDULE("schedule", ScheduleView.class, FontAwesome.CALENDAR_O, false);

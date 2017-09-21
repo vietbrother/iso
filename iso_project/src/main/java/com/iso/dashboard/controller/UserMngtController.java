@@ -331,7 +331,8 @@ public class UserMngtController {
 
     public void createDialog(boolean isInsert, Users dto) {
         UserMngtUI ui = new UserMngtUI();
-        Window window = new Window(BundleUtils.getString("common.button.add"), ui);
+        Window window = new Window(isInsert ? BundleUtils.getString("common.button.add") : BundleUtils.getString("common.button.edit"), 
+                ui);
         //window.setWidth("700px");
         float height = UI.getCurrent().getWidth() * 3 / 4;
         window.setWidth(String.valueOf(height) + "%");

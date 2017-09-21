@@ -9,6 +9,7 @@ import com.iso.dashboard.utils.HibernateUtil;
 import java.util.Date;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.type.StandardBasicTypes;
 
 /**
@@ -18,7 +19,8 @@ import org.hibernate.type.StandardBasicTypes;
 public abstract class BaseDAO {
 
     public Session getSession() {
-        return HibernateUtil.getSessionAndBeginTransaction();
+//        return HibernateUtil.getSessionAndBeginTransaction();
+        return HibernateUtil.getSessionFactory().openSession();
     }
     
         public Date getSysdate()
