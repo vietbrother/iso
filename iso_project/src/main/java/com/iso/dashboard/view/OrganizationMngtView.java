@@ -58,7 +58,7 @@ public class OrganizationMngtView extends Panel implements View {
         VerticalLayout root = new VerticalLayout();
         root.setCaption(BundleUtils.getStringCas("menu.organizationMngt"));
         root.setSizeFull();
-        root.setSpacing(false);
+        root.setSpacing(true);
         root.addStyleName("dashboard-view");
         Responsive.makeResponsive(root);
 
@@ -72,7 +72,7 @@ public class OrganizationMngtView extends Panel implements View {
 
         root.addComponent(buildHeader());
         root.addComponent(content);
-        root.setExpandRatio(content, 1);
+//        root.setExpandRatio(content, 1);
 
 //        addComponent(buildToolbar());
         new OrganizationMngtController(this);
@@ -114,6 +114,7 @@ public class OrganizationMngtView extends Panel implements View {
         btnAdd.setWidth(Constants.STYLE_CONF.AUTO_VALUE);
         btnAdd.setHeight(Constants.STYLE_CONF.AUTO_VALUE);
         btnAdd.setIcon(ISOIcons.ADD);
+        btnAdd.setStyleName(ValoTheme.BUTTON_PRIMARY);
          // btnAdd
         btnUpdate = new Button();
         btnUpdate.setCaption(BundleUtils.getString("common.button.edit"));
@@ -140,7 +141,7 @@ public class OrganizationMngtView extends Panel implements View {
         contenPanel.addStyleName("dashboard-panels");
         Responsive.makeResponsive(contenPanel);
 
-        loadTreeData();
+//        loadTreeData();
         orgTree = new Tree();
 
         contenPanel.addComponent(orgTree);

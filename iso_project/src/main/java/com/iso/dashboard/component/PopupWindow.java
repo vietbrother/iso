@@ -41,7 +41,7 @@ import com.vaadin.ui.themes.ValoTheme;
 //import com.vaadin.v7.data.fieldgroup.FieldGroup.CommitException;
 
 @SuppressWarnings("serial")
-public class ProfilePreferencesWindow extends Window {
+public class PopupWindow extends Window {
 
     public static final String ID = "profilepreferenceswindow";
 
@@ -74,7 +74,7 @@ public class ProfilePreferencesWindow extends Window {
     @PropertyId("bio")
     private TextArea bioField;
 
-    private ProfilePreferencesWindow(final User user,
+    private PopupWindow(final User user,
             final boolean preferencesTabOpen) {
         addStyleName("profile-window");
         setId(ID);
@@ -83,7 +83,7 @@ public class ProfilePreferencesWindow extends Window {
         setModal(true);
         setCloseShortcut(KeyCode.ESCAPE, null);
         setResizable(false);
-        setClosable(true);
+        setClosable(false);
         setHeight(90.0f, Unit.PERCENTAGE);
 
         VerticalLayout content = new VerticalLayout();
@@ -95,7 +95,6 @@ public class ProfilePreferencesWindow extends Window {
         TabSheet detailsWrapper = new TabSheet();
         detailsWrapper.setSizeFull();
         detailsWrapper.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
-        detailsWrapper.addStyleName(ValoTheme.TABSHEET_ICONS_ON_TOP);
         detailsWrapper.addStyleName(ValoTheme.TABSHEET_CENTERED_TABS);
         content.addComponent(detailsWrapper);
         content.setExpandRatio(detailsWrapper, 1f);
@@ -264,7 +263,7 @@ public class ProfilePreferencesWindow extends Window {
     public static void open(final User user,
             final boolean preferencesTabActive) {
         DashboardEventBus.post(new CloseOpenWindowsEvent());
-        Window w = new ProfilePreferencesWindow(user, preferencesTabActive);
+        Window w = new PopupWindow(user, preferencesTabActive);
         UI.getCurrent().addWindow(w);
         w.focus();
     }

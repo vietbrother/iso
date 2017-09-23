@@ -8,18 +8,24 @@ package com.iso.dashboard.ui;
 import com.iso.dashboard.utils.BundleUtils;
 import com.iso.dashboard.utils.Constants;
 import com.iso.dashboard.utils.ISOIcons;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Responsive;
 import com.vaadin.shared.ui.datefield.Resolution;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.PopupDateField;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 /**
  *
@@ -37,20 +43,35 @@ public class OrganizationMngtUI extends CustomComponent {
     private ComboBox cmbParent;
     private Button btnSave;
     private Button btnCancel;
+    
+    private String caption;
 
-    public OrganizationMngtUI() {
+    public OrganizationMngtUI(String caption) {
+//        buildMainLayout();
+//        setCompositionRoot(mainLayout);
+        this.caption = caption;
         buildMainLayout();
-        setCompositionRoot(mainLayout);
+        TabSheet detailsWrapper = new TabSheet();
+        detailsWrapper.setSizeFull();
+        detailsWrapper.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
+//        detailsWrapper.addStyleName(ValoTheme.TABSHEET_CENTERED_TABS);
+        detailsWrapper.addComponent(mainLayout);
+        setCompositionRoot(detailsWrapper);
     }
 
     private void buildMainLayout() {
         mainLayout = new VerticalLayout();
+        mainLayout.setCaption(this.caption);
+        mainLayout.setIcon(FontAwesome.CALENDAR);
         mainLayout.setSizeUndefined();
         mainLayout.setMargin(true);
         mainLayout.setSpacing(true);
         Responsive.makeResponsive(mainLayout);
 
-        mainLayout.addComponent(buildContent());
+        Component mainContent = buildContent();
+        mainLayout.addComponent(mainContent);
+        mainLayout.setExpandRatio(mainContent, 1.0f);
+        mainLayout.addComponent(buildButton());
 
 //        // top-level component properties
 //        setWidth("100.0%");
@@ -75,7 +96,7 @@ public class OrganizationMngtUI extends CustomComponent {
         Responsive.makeResponsive(contenPanel);
 
         contenPanel.addComponent(buildFieldsInfo());
-        contenPanel.addComponent(buildButton());
+//        contenPanel.addComponent(buildButton());
         return contenPanel;
     }
 
@@ -91,7 +112,8 @@ public class OrganizationMngtUI extends CustomComponent {
         txtName.setRequired(true);
         txtName.setDescription(BundleUtils.getString("orgMngt.list.name"));
         txtName.setCaption(BundleUtils.getString("orgMngt.list.name"));
-        
+        txtName.setInputPrompt(BundleUtils.getString("orgMngt.list.name"));
+
         txtCode = new TextField();
         txtCode.setImmediate(true);
         txtCode.setRequired(true);
@@ -100,7 +122,8 @@ public class OrganizationMngtUI extends CustomComponent {
         txtCode.setRequired(true);
         txtCode.setDescription(BundleUtils.getString("orgMngt.list.code"));
         txtCode.setCaption(BundleUtils.getString("orgMngt.list.code"));
-        
+        txtCode.setInputPrompt(BundleUtils.getString("orgMngt.list.code"));
+
         txtValue = new TextField();
         txtValue.setImmediate(true);
         txtValue.setRequired(true);
@@ -109,7 +132,8 @@ public class OrganizationMngtUI extends CustomComponent {
         txtValue.setRequired(true);
         txtValue.setDescription(BundleUtils.getString("orgMngt.list.value"));
         txtValue.setCaption(BundleUtils.getString("orgMngt.list.value"));
-        
+        txtValue.setInputPrompt(BundleUtils.getString("orgMngt.list.value"));
+
         txtPosition = new TextField();
         txtPosition.setImmediate(true);
         txtPosition.setRequired(true);
@@ -118,62 +142,69 @@ public class OrganizationMngtUI extends CustomComponent {
         txtPosition.setRequired(true);
         txtPosition.setDescription(BundleUtils.getString("orgMngt.list.position"));
         txtPosition.setCaption(BundleUtils.getString("orgMngt.list.position"));
-        
+        txtPosition.setInputPrompt(BundleUtils.getString("orgMngt.list.position"));
+
         txaDescription = new TextArea();
         txaDescription.setImmediate(true);
         txaDescription.setRequired(true);
         txaDescription.setWidth("100.0%");
-        txaDescription.setHeight(Constants.STYLE_CONF.AUTO_VALUE);
+        txaDescription.setHeight(String.valueOf(UI.getCurrent().getWidth() * 0.75));
         txaDescription.setRequired(true);
         txaDescription.setDescription(BundleUtils.getString("orgMngt.list.description"));
         txaDescription.setCaption(BundleUtils.getString("orgMngt.list.description"));
+        txaDescription.setInputPrompt(BundleUtils.getString("orgMngt.list.description"));
 
-
-
-        
         cmbParent = new ComboBox();
         cmbParent.setCaption(BundleUtils.getString("orgMngt.list.parent"));
         cmbParent.setImmediate(true);
         cmbParent.setWidth(Constants.STYLE_CONF.AUTO_VALUE);
         cmbParent.setHeight(Constants.STYLE_CONF.AUTO_VALUE);
         cmbParent.setRequired(true);
-        
-        
+
         cmbStatus = new ComboBox();
         cmbStatus.setCaption(BundleUtils.getString("orgMngt.list.sex"));
         cmbStatus.setImmediate(true);
         cmbStatus.setWidth(Constants.STYLE_CONF.AUTO_VALUE);
         cmbStatus.setHeight(Constants.STYLE_CONF.AUTO_VALUE);
         cmbStatus.setRequired(true);
-        
-        HorizontalLayout row1 = new HorizontalLayout();
-        row1.setSpacing(true);
-        row1.addStyleName("fields");
-        row1.addComponents(txtName,
-                txtCode,
-                txtValue
-        );
-        HorizontalLayout row2 = new HorizontalLayout();
-        row2.setSpacing(true);
-        row2.addStyleName("fields");
-        row2.addComponents(txtPosition,
-//                cmbParent,
-                cmbStatus
-        );
-        HorizontalLayout row3 = new HorizontalLayout();
-        row3.setSpacing(true);
-        row3.addStyleName("fields");
-        row3.addComponents(txaDescription);
 
+//        HorizontalLayout row1 = new HorizontalLayout();
+//        row1.setSpacing(true);
+//        row1.addStyleName("fields");
+//        row1.addComponents(txtName,
+//                txtCode,
+//                txtValue
+//        );
+//        HorizontalLayout row2 = new HorizontalLayout();
+//        row2.setSpacing(true);
+//        row2.addStyleName("fields");
+//        row2.addComponents(txtPosition,
+////                cmbParent,
+//                cmbStatus
+//        );
+//        HorizontalLayout row3 = new HorizontalLayout();
+//        row3.setSpacing(true);
+//        row3.addStyleName("fields");
+//        row3.addComponents(txaDescription);
+//
+//
+//        VerticalLayout fields = new VerticalLayout();
+//        fields.setSizeUndefined();
+//        fields.setSpacing(true);
+//        Responsive.makeResponsive(fields);
+//        fields.addComponent(row1);
+//        fields.addComponent(row2);
+//        fields.addComponent(row3);
+        FormLayout details = new FormLayout();
+        details.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
+        details.addComponent(txtName);
+        details.addComponent(txtCode);
+        details.addComponent(txtValue);
+        details.addComponent(txtPosition);
+        details.addComponent(cmbStatus);
+        details.addComponent(txaDescription);
 
-        VerticalLayout fields = new VerticalLayout();
-        fields.setSizeUndefined();
-        fields.setSpacing(true);
-        Responsive.makeResponsive(fields);
-        fields.addComponent(row1);
-        fields.addComponent(row2);
-        fields.addComponent(row3);
-        return fields;
+        return details;
     }
 
     public Component buildButton() {
@@ -187,6 +218,7 @@ public class OrganizationMngtUI extends CustomComponent {
         btnSave.setWidth(Constants.STYLE_CONF.AUTO_VALUE);
         btnSave.setHeight(Constants.STYLE_CONF.AUTO_VALUE);
         btnSave.setIcon(ISOIcons.SAVE);
+        btnSave.setStyleName(ValoTheme.BUTTON_PRIMARY);
         // btnCancel
         btnCancel = new Button();
         btnCancel.setCaption(BundleUtils.getString("common.button.cancel"));
@@ -197,12 +229,17 @@ public class OrganizationMngtUI extends CustomComponent {
 
         HorizontalLayout btnLayout = new HorizontalLayout();
         btnLayout.setSpacing(true);
-        btnLayout.setMargin(true);
         btnLayout.addStyleName("fields");
         btnLayout.addComponents(btnSave,
                 btnCancel);
+        HorizontalLayout footer = new HorizontalLayout();
+        footer.addStyleName(ValoTheme.WINDOW_BOTTOM_TOOLBAR);
+        footer.setWidth(100.0f, Unit.PERCENTAGE);
+        footer.setSpacing(false);
+        footer.addComponent(btnLayout);
+        footer.setComponentAlignment(btnLayout, Alignment.BOTTOM_RIGHT);
 
-        return btnLayout;
+        return footer;
     }
 
     public VerticalLayout getMainLayout() {
@@ -285,5 +322,4 @@ public class OrganizationMngtUI extends CustomComponent {
         this.btnCancel = btnCancel;
     }
 
-    
 }

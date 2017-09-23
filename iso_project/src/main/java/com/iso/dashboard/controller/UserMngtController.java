@@ -330,13 +330,14 @@ public class UserMngtController {
     }
 
     public void createDialog(boolean isInsert, Users dto) {
-        UserMngtUI ui = new UserMngtUI();
-        Window window = new Window(isInsert ? BundleUtils.getString("common.button.add") : BundleUtils.getString("common.button.edit"), 
+        UserMngtUI ui = new UserMngtUI(isInsert ? BundleUtils.getString("common.button.add") : BundleUtils.getString("common.button.edit"));
+        Window window = new Window(
+                "", 
                 ui);
         //window.setWidth("700px");
-        float height = UI.getCurrent().getWidth() * 3 / 4;
+        float height = UI.getCurrent().getWidth() * 1 / 3;
         window.setWidth(String.valueOf(height) + "%");
-        window.setIcon(VaadinIcons.CALENDAR_USER);
+//        window.setIcon(VaadinIcons.CALENDAR_USER);
         initDataDialog(ui, isInsert, dto);
         ui.getBtnSave().addClickListener(new Button.ClickListener() {
             @Override
@@ -376,6 +377,7 @@ public class UserMngtController {
                     d.setStyleName(Reindeer.LAYOUT_BLUE);
                     d.setContentMode(ConfirmDialog.ContentMode.HTML);
                     d.getOkButton().setIcon(ISOIcons.SAVE);
+                    d.getOkButton().focus();
                     d.getCancelButton().setIcon(ISOIcons.CANCEL);
                 }
             }
@@ -395,6 +397,7 @@ public class UserMngtController {
         window.setModal(true);
         DataUtil.reloadWindow(window);
         UI.getCurrent().addWindow(window);
+        ui.getTxtUsername().focus();
     }
 
     private void getDataFromUI(UserMngtUI ui, Users dto) {
