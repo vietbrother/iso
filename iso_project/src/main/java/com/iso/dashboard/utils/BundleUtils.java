@@ -269,4 +269,9 @@ public class BundleUtils {
         }
         return lstColumns;
     }
+        
+    public static String[] getHeaderColumnVisible(String key){
+        String lstColumnsVal = BundleUtils.getStringCas(key);
+        return lstColumnsVal.split(SEPARATOR);
+    }
 }

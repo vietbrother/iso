@@ -40,6 +40,27 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
+import java.util.Locale;
+import org.dussan.vaadin.dcharts.ChartImageFormat;
+import org.dussan.vaadin.dcharts.DCharts;
+import org.dussan.vaadin.dcharts.base.elements.XYaxis;
+import org.dussan.vaadin.dcharts.base.elements.XYseries;
+import org.dussan.vaadin.dcharts.data.DataSeries;
+import org.dussan.vaadin.dcharts.data.Ticks;
+import org.dussan.vaadin.dcharts.events.mouseenter.ChartDataMouseEnterHandler;
+import org.dussan.vaadin.dcharts.events.mouseleave.ChartDataMouseLeaveHandler;
+import org.dussan.vaadin.dcharts.metadata.LegendPlacements;
+import org.dussan.vaadin.dcharts.metadata.SeriesToggles;
+import org.dussan.vaadin.dcharts.metadata.XYaxes;
+import org.dussan.vaadin.dcharts.metadata.renderers.AxisRenderers;
+import org.dussan.vaadin.dcharts.metadata.renderers.SeriesRenderers;
+import org.dussan.vaadin.dcharts.options.Axes;
+import org.dussan.vaadin.dcharts.options.Legend;
+import org.dussan.vaadin.dcharts.options.Options;
+import org.dussan.vaadin.dcharts.options.Series;
+import org.dussan.vaadin.dcharts.options.SeriesDefaults;
+import org.dussan.vaadin.dcharts.renderers.legend.EnhancedLegendRenderer;
+import org.dussan.vaadin.dcharts.renderers.tick.AxisTickRenderer;
 //import com.vaadin.v7.ui.Table;
 
 @SuppressWarnings("serial")
@@ -69,7 +90,7 @@ public final class DashboardView extends Panel implements View,
 
         root.addComponent(buildHeader());
 
-        root.addComponent(buildMostUsedFunc());
+        root.addComponent(buildChart());
 
         Component content = buildContent();
         root.addComponent(content);
@@ -85,7 +106,7 @@ public final class DashboardView extends Panel implements View,
         });
     }
 
-    private Component buildMostUsedFunc() {
+    private Component buildChart() {
         CssLayout clMostUsedFunc = new CssLayout();
         clMostUsedFunc.addStyleName("sparks");
         clMostUsedFunc.setWidth("100%");
@@ -93,13 +114,60 @@ public final class DashboardView extends Panel implements View,
 
         VerticalLayout vertical = new VerticalLayout();
         vertical.setMargin(true);
-        
 
-        
-        vertical.addComponent(new MostUsedFunctionUI());
+        vertical.addComponent(chartsDemo1());
 
         clMostUsedFunc.addComponent(vertical);
         return clMostUsedFunc;
+    }
+
+    private DCharts chartsDemo1() {
+        DCharts chart = new DCharts();
+        chart.autoSelectDecimalAndThousandsSeparator(new Locale("sl", "SI"));
+        chart.setHeight("400px");
+        chart.setCaption("Demo");
+
+        DataSeries dataSeries = new DataSeries();
+        dataSeries.add(200, 600, 700, 1000);
+        dataSeries.add(460, -210, 690, 820);
+        dataSeries.add(-260, -440, 320, 200);
+
+        SeriesDefaults seriesDefaults = new SeriesDefaults()
+                .setFillToZero(true).setRenderer(SeriesRenderers.BAR);
+
+        Series series = new Series()
+                .addSeries(new XYseries().setLabel("Hotel"))
+                .addSeries(new XYseries().setLabel("Event Regristration"))
+                .addSeries(new XYseries().setLabel("Airfare"));
+
+        Legend legend = new Legend()
+                .setShow(true)
+                .setRendererOptions(
+                        new EnhancedLegendRenderer().setSeriesToggle(
+                                SeriesToggles.SLOW).setSeriesToggleReplot(true))
+                .setPlacement(LegendPlacements.OUTSIDE_GRID);
+
+        Axes axes = new Axes().addAxis(
+                new XYaxis().setRenderer(AxisRenderers.CATEGORY).setTicks(
+                        new Ticks().add("May", "June", "July", "August")))
+                .addAxis(
+                        new XYaxis(XYaxes.Y).setPad(1.05f).setTickOptions(
+                                new AxisTickRenderer().setFormatString("$%d")));
+
+        Options options = new Options().setSeriesDefaults(seriesDefaults)
+                .setSeries(series).setLegend(legend).setAxes(axes);
+
+        chart.setDataSeries(dataSeries).setOptions(options)
+                //				.setEnableDownload(true)
+                .setChartImageFormat(ChartImageFormat.GIF).show();
+
+        chart.setEnableChartDataMouseEnterEvent(true);
+        chart.setEnableChartDataMouseLeaveEvent(true);
+        chart.setEnableChartDataClickEvent(true);
+        chart.setEnableChartDataRightClickEvent(true);
+        chart.setEnableChartImageChangeEvent(true);
+
+        return chart;
     }
 
     private Component buildHeader() {
@@ -157,17 +225,18 @@ public final class DashboardView extends Panel implements View,
         dashboardPanels.addStyleName("dashboard-panels");
         Responsive.makeResponsive(dashboardPanels);
 
-        dashboardPanels.addComponent(buildTopGrossingMovies());
+        dashboardPanels.addComponent(buildMostUsedFunc());
         dashboardPanels.addComponent(buildNotes());
         dashboardPanels.addComponent(buildPopularMovies());
 
         return dashboardPanels;
     }
 
-    private Component buildTopGrossingMovies() {
-        Button topGrossingMoviesChart = new Button("topGrossingMoviesChart");
-        topGrossingMoviesChart.setSizeFull();
-        return createContentWrapper(topGrossingMoviesChart);
+    private Component buildMostUsedFunc() {
+        MostUsedFunctionUI ui = new MostUsedFunctionUI();
+        ui.setCaption(BundleUtils.getStringCas("menu.mostUsedFunc"));
+        ui.setSizeFull();
+        return createContentWrapper(ui);
     }
 
     private Component buildNotes() {

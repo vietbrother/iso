@@ -44,7 +44,7 @@ public class MostUsedFunctionUI extends CustomComponent {
         mostUsedFuncTitle.addStyleName(ValoTheme.LABEL_COLORED);
         mostUsedFuncTitle.addStyleName(ValoTheme.LABEL_BOLD);
         mostUsedFuncTitle.addStyleName(ValoTheme.LABEL_HUGE);
-        mainLayout.addComponent(mostUsedFuncTitle);
+//        mainLayout.addComponent(mostUsedFuncTitle);
 
         for (String viewName : lstMostUsedFunc) {
             Button btn = new Button(BundleUtils.getStringCas("menu." + viewName));

@@ -102,15 +102,6 @@ public class OrganizationMngtController {
         }
         orgTree.setItemCaptionPropertyId("name");
         orgTree.setItemCaptionMode(AbstractSelect.ITEM_CAPTION_MODE_PROPERTY);
-        orgTree.addItemClickListener(new ItemClickEvent.ItemClickListener() {
-
-            @Override
-            public void itemClick(ItemClickEvent event) {
-                Organization org = (Organization) event.getItemId();
-                nodeSelected = org;
-                Notification.show("Select " + org.toString());
-            }
-        });
         orgTree.addExpandListener(new Tree.ExpandListener() {
 
             @Override
@@ -122,6 +113,17 @@ public class OrganizationMngtController {
                 }
             }
         });
+        orgTree.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+
+            @Override
+            public void itemClick(ItemClickEvent event) {
+                Organization org = (Organization) event.getItemId();
+                nodeSelected = org;
+                view.getDetailTitle().setValue(org.getName());
+                view.getDetailContent().setValue(org.getDescription());
+            }
+        });
+
     }
 
     private void doAction() {
