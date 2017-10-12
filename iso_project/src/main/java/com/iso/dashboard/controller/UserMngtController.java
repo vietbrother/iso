@@ -82,7 +82,7 @@ public class UserMngtController {
 //                return i + 1;
 //            }
 //        });
-        pagedTable.addGeneratedColumn("btnAction", new Table.ColumnGenerator() {
+        pagedTable.addGeneratedColumn("action", new Table.ColumnGenerator() {
 //            private static final long serialVersionUID = -5042109683675242407L;
 
             public Component generateCell(Table source, Object itemId, Object columnId) {
@@ -152,16 +152,13 @@ public class UserMngtController {
         pagedTable.setAlwaysRecalculateColumnWidths(true);
         pagedTable.setResponsive(true);
         pagedTable.setColumnHeaders(headerName);
-    }
-
-    public void reloadData(List<Users> lstUsers) {
-        pagedTable.setContainerDataSource(createContainer(lstUsers));
+        pagedTable.setVisibleColumns(BundleUtils.getStringCas("header.userMngt").split("#"));
     }
 
     public IndexedContainer createContainer(List<Users> lstUser) {
         IndexedContainer container = new IndexedContainer();
 //        container.addContainerProperty("stt", String.class, null);
-        container.addContainerProperty("btnAction", String.class, null);
+//        container.addContainerProperty("action", String.class, null);
         container.addContainerProperty("id", String.class, null);
         container.addContainerProperty("username", String.class, null);
         container.addContainerProperty("email", String.class, null);
@@ -175,6 +172,10 @@ public class UserMngtController {
         }
         container.sort(new Object[]{"id"}, new boolean[]{true});
         return container;
+    }
+
+    public void reloadData(List<Users> lstUsers) {
+        pagedTable.setContainerDataSource(createContainer(lstUsers));
     }
 
     private void doAction() {
@@ -193,7 +194,7 @@ public class UserMngtController {
                 onInsert();
             }
         });
-        
+
         view.getBtnExport().addClickListener(new Button.ClickListener() {
 
             @Override
@@ -330,13 +331,14 @@ public class UserMngtController {
     }
 
     public void createDialog(boolean isInsert, Users dto) {
-        UserMngtUI ui = new UserMngtUI();
-        Window window = new Window(isInsert ? BundleUtils.getString("common.button.add") : BundleUtils.getString("common.button.edit"), 
+        UserMngtUI ui = new UserMngtUI(isInsert ? BundleUtils.getString("common.button.add") : BundleUtils.getString("common.button.edit"));
+        Window window = new Window(
+                "",
                 ui);
         //window.setWidth("700px");
-        float height = UI.getCurrent().getWidth() * 3 / 4;
+        float height = UI.getCurrent().getWidth() * 1 / 3;
         window.setWidth(String.valueOf(height) + "%");
-        window.setIcon(VaadinIcons.CALENDAR_USER);
+//        window.setIcon(VaadinIcons.CALENDAR_USER);
         initDataDialog(ui, isInsert, dto);
         ui.getBtnSave().addClickListener(new Button.ClickListener() {
             @Override
@@ -376,6 +378,7 @@ public class UserMngtController {
                     d.setStyleName(Reindeer.LAYOUT_BLUE);
                     d.setContentMode(ConfirmDialog.ContentMode.HTML);
                     d.getOkButton().setIcon(ISOIcons.SAVE);
+                    d.getOkButton().focus();
                     d.getCancelButton().setIcon(ISOIcons.CANCEL);
                 }
             }
@@ -395,6 +398,7 @@ public class UserMngtController {
         window.setModal(true);
         DataUtil.reloadWindow(window);
         UI.getCurrent().addWindow(window);
+        ui.getTxtUsername().focus();
     }
 
     private void getDataFromUI(UserMngtUI ui, Users dto) {

@@ -8,17 +8,26 @@ package com.iso.dashboard.ui;
 import com.iso.dashboard.utils.BundleUtils;
 import com.iso.dashboard.utils.Constants;
 import com.iso.dashboard.utils.ISOIcons;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Responsive;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.datefield.Resolution;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.PopupDateField;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
 /**
  *
@@ -37,19 +46,38 @@ public class UserMngtUI extends CustomComponent {
     private Button btnSave;
     private Button btnCancel;
 
-    public UserMngtUI() {
+    private String caption;
+    public UserMngtUI(String caption) {
+//        addStyleName("profile-window");
+//        Responsive.makeResponsive(this);
+////        setResizable(false);
+////        setClosable(true);
+//        setHeight(90.0f, Unit.PERCENTAGE);
+        this.caption = caption;
         buildMainLayout();
-        setCompositionRoot(mainLayout);
+        TabSheet detailsWrapper = new TabSheet();
+        detailsWrapper.setSizeFull();
+        detailsWrapper.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
+//        detailsWrapper.addStyleName(ValoTheme.TABSHEET_CENTERED_TABS);
+        detailsWrapper.addComponent(mainLayout);
+        setCompositionRoot(detailsWrapper);
+//        content.addComponent(detailsWrapper);
+//        content.setExpandRatio(detailsWrapper, 1f);
     }
 
     private void buildMainLayout() {
         mainLayout = new VerticalLayout();
+        mainLayout.setCaption(this.caption);
+        mainLayout.setIcon(FontAwesome.CALENDAR);
         mainLayout.setSizeUndefined();
         mainLayout.setMargin(true);
         mainLayout.setSpacing(true);
         Responsive.makeResponsive(mainLayout);
 
-        mainLayout.addComponent(buildContent());
+        Component mainContent = buildContent();
+        mainLayout.addComponent(mainContent);
+        mainLayout.setExpandRatio(mainContent, 1.0f);
+        mainLayout.addComponent(buildButton());
 
 //        // top-level component properties
 //        setWidth("100.0%");
@@ -74,7 +102,7 @@ public class UserMngtUI extends CustomComponent {
         Responsive.makeResponsive(contenPanel);
 
         contenPanel.addComponent(buildFieldsInfo());
-        contenPanel.addComponent(buildButton());
+//        contenPanel.addComponent(buildButton());
         return contenPanel;
     }
 
@@ -90,6 +118,7 @@ public class UserMngtUI extends CustomComponent {
         txtUsername.setRequired(true);
         txtUsername.setDescription(BundleUtils.getString("userMngt.list.username"));
         txtUsername.setCaption(BundleUtils.getString("userMngt.list.username"));
+        txtUsername.setInputPrompt(BundleUtils.getString("userMngt.list.username"));
 
         txtEmail = new TextField();
         txtEmail.setImmediate(true);
@@ -99,6 +128,7 @@ public class UserMngtUI extends CustomComponent {
         txtEmail.setRequired(true);
         txtEmail.setDescription(BundleUtils.getString("userMngt.list.email"));
         txtEmail.setCaption(BundleUtils.getString("userMngt.list.email"));
+        txtEmail.setInputPrompt(BundleUtils.getString("userMngt.list.email"));
 
         txtMobile = new TextField();
         txtMobile.setImmediate(true);
@@ -108,6 +138,7 @@ public class UserMngtUI extends CustomComponent {
         txtMobile.setRequired(true);
         txtMobile.setDescription(BundleUtils.getString("userMngt.list.mobile"));
         txtMobile.setCaption(BundleUtils.getString("userMngt.list.mobile"));
+        txtMobile.setInputPrompt(BundleUtils.getString("userMngt.list.mobile"));
 
         txtFullname = new TextField();
         txtFullname.setImmediate(true);
@@ -117,6 +148,7 @@ public class UserMngtUI extends CustomComponent {
         txtFullname.setRequired(true);
         txtFullname.setDescription(BundleUtils.getString("userMngt.list.fullname"));
         txtFullname.setCaption(BundleUtils.getString("userMngt.list.fullname"));
+        txtFullname.setInputPrompt(BundleUtils.getString("userMngt.list.fullname"));
 
         txtRole = new TextField();
         txtRole.setImmediate(true);
@@ -126,6 +158,7 @@ public class UserMngtUI extends CustomComponent {
         txtRole.setRequired(true);
         txtRole.setDescription(BundleUtils.getString("userMngt.list.role"));
         txtRole.setCaption(BundleUtils.getString("userMngt.list.role"));
+        txtRole.setInputPrompt(BundleUtils.getString("userMngt.list.role"));
 
         pdBirthday = new PopupDateField();
         pdBirthday.setImmediate(true);
@@ -134,39 +167,26 @@ public class UserMngtUI extends CustomComponent {
         pdBirthday.setDateFormat(Constants.DATE.ddMMyyyHHmmss);
         pdBirthday.setResolution(Resolution.SECOND);
         pdBirthday.setCaption(BundleUtils.getString("userMngt.list.birthDay"));
+        pdBirthday.setInputPrompt(BundleUtils.getString("userMngt.list.birthDay"));
 
-        
         cmbSex = new ComboBox();
         cmbSex.setCaption(BundleUtils.getString("userMngt.list.sex"));
         cmbSex.setImmediate(true);
         cmbSex.setWidth(Constants.STYLE_CONF.AUTO_VALUE);
         cmbSex.setHeight(Constants.STYLE_CONF.AUTO_VALUE);
         cmbSex.setRequired(true);
-        
-        HorizontalLayout row1 = new HorizontalLayout();
-        row1.setSpacing(true);
-        row1.addStyleName("fields");
-        row1.addComponents(txtUsername,
-                txtEmail,
-                txtMobile
-        );
-        HorizontalLayout row2 = new HorizontalLayout();
-        row2.setSpacing(true);
-        row2.addStyleName("fields");
-        row2.addComponents(txtFullname,
-                txtRole,
-                cmbSex
-        );
 
+        FormLayout details = new FormLayout();
+        details.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
+        details.addComponent(txtUsername);
+        details.addComponent(txtFullname);
+        details.addComponent(txtEmail);
+        details.addComponent(txtMobile);
+        details.addComponent(txtRole);
+        details.addComponent(pdBirthday);
+        details.addComponent(cmbSex);
 
-        VerticalLayout fields = new VerticalLayout();
-        fields.setSizeUndefined();
-        fields.setSpacing(true);
-        Responsive.makeResponsive(fields);
-        fields.addComponent(row1);
-        fields.addComponent(row2);
-        fields.addComponent(pdBirthday);
-        return fields;
+        return details;
     }
 
     public Component buildButton() {
@@ -177,6 +197,7 @@ public class UserMngtUI extends CustomComponent {
         btnSave = new Button();
         btnSave.setCaption(BundleUtils.getString("common.button.save"));
         btnSave.setImmediate(true);
+        btnSave.setStyleName(ValoTheme.BUTTON_PRIMARY);
         btnSave.setWidth(Constants.STYLE_CONF.AUTO_VALUE);
         btnSave.setHeight(Constants.STYLE_CONF.AUTO_VALUE);
         btnSave.setIcon(ISOIcons.SAVE);
@@ -188,14 +209,28 @@ public class UserMngtUI extends CustomComponent {
         btnCancel.setHeight(Constants.STYLE_CONF.AUTO_VALUE);
         btnCancel.setIcon(ISOIcons.CANCEL);
 
-        HorizontalLayout btnLayout = new HorizontalLayout();
-        btnLayout.setSpacing(true);
-        btnLayout.setMargin(true);
-        btnLayout.addStyleName("fields");
-        btnLayout.addComponents(btnSave,
-                btnCancel);
+        HorizontalLayout temp = new HorizontalLayout();
+        temp.setSpacing(true);
+        temp.addStyleName("fields");
+        temp.addComponents(btnSave,
+                btnCancel
+        );
+        HorizontalLayout footer = new HorizontalLayout();
+        footer.addStyleName(ValoTheme.WINDOW_BOTTOM_TOOLBAR);
+        footer.setWidth(100.0f, Unit.PERCENTAGE);
+        footer.setSpacing(false);
+        footer.addComponent(temp);
+        footer.setComponentAlignment(temp, Alignment.BOTTOM_RIGHT);
+//        footer.setComponentAlignment(btnSave, Alignment.TOP_RIGHT);
+//        footer.addComponent(btnCancel);
+//        footer.setComponentAlignment(btnSave, Alignment.TOP_LEFT);
+//        btnLayout.setSpacing(true);
+//        btnLayout.setMargin(true);
+//        btnLayout.addStyleName("fields");
+//        btnLayout.addComponents(btnSave,
+//                btnCancel);
 
-        return btnLayout;
+        return footer;
     }
 
     public VerticalLayout getMainLayout() {
@@ -238,8 +273,6 @@ public class UserMngtUI extends CustomComponent {
         this.txtRole = txtRole;
     }
 
-
-
     public TextField getTxtEmail() {
         return txtEmail;
     }
@@ -280,5 +313,4 @@ public class UserMngtUI extends CustomComponent {
         this.cmbSex = cmbSex;
     }
 
-    
 }

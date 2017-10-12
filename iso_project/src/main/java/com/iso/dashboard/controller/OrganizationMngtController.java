@@ -65,8 +65,8 @@ public class OrganizationMngtController {
         container.addAll(lstDataTree);
         return container;
     }
-    
-    public void reloadTree(){
+
+    public void reloadTree() {
         orgTree.removeAllItems();
         initTree();
 //        orgTree.setContainerDataSource(reloadData());
@@ -102,26 +102,28 @@ public class OrganizationMngtController {
         }
         orgTree.setItemCaptionPropertyId("name");
         orgTree.setItemCaptionMode(AbstractSelect.ITEM_CAPTION_MODE_PROPERTY);
-        orgTree.addItemClickListener(new ItemClickEvent.ItemClickListener() {
-
-            @Override
-            public void itemClick(ItemClickEvent event) {
-                Organization org = (Organization) event.getItemId();
-                nodeSelected = org;
-                Notification.show("Select " + org.toString());
-            }
-        });
         orgTree.addExpandListener(new Tree.ExpandListener() {
 
             @Override
             public void nodeExpand(Tree.ExpandEvent event) {
                 Organization org = (Organization) event.getItemId();
                 List<Organization> lstChild = OrganizationMngService.getInstance().listOrganization(null, String.valueOf(org.getId()));
-                if(lstChild == null || lstChild.isEmpty()){
+                if (lstChild == null || lstChild.isEmpty()) {
                     orgTree.setChildrenAllowed(org, false);
                 }
             }
         });
+        orgTree.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+
+            @Override
+            public void itemClick(ItemClickEvent event) {
+                Organization org = (Organization) event.getItemId();
+                nodeSelected = org;
+                view.getDetailTitle().setValue(org.getName());
+                view.getDetailContent().setValue(org.getDescription());
+            }
+        });
+
     }
 
     private void doAction() {
@@ -129,7 +131,7 @@ public class OrganizationMngtController {
 
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                if(nodeSelected == null){
+                if (nodeSelected == null) {
                     Notification.show(BundleUtils.getString("orgMngt.validate.nodeParentIsEmpty"));
                     return;
                 }
@@ -140,7 +142,7 @@ public class OrganizationMngtController {
 
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                if(nodeSelected == null){
+                if (nodeSelected == null) {
                     Notification.show(BundleUtils.getString("orgMngt.validate.nodeIsEmpty"));
                     return;
                 }
@@ -151,7 +153,7 @@ public class OrganizationMngtController {
 
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                if(nodeSelected == null){
+                if (nodeSelected == null) {
                     Notification.show(BundleUtils.getString("orgMngt.validate.nodeIsEmpty"));
                     return;
                 }
@@ -179,9 +181,7 @@ public class OrganizationMngtController {
             }
         });
     }
-    
-    
-    
+
     private void initDataDialog(OrganizationMngtUI ui, boolean isInsert, Organization dto) {
 
         List<CatItemDTO> lstStatus = new ArrayList<>();
@@ -193,22 +193,22 @@ public class OrganizationMngtController {
         } else {
             ui.getTxtName().setValue(dto.getName() == null ? "" : dto.getName());
             ui.getTxtCode().setValue(dto.getCode() == null ? "" : dto.getCode());
-            ui.getTxtValue().setValue(dto.getValue()== null ? "" : dto.getValue());
-            ui.getTxtPosition().setValue(dto.getPosition()== null ? "" : dto.getPosition());
-            ui.getTxaDescription().setValue(dto.getDescription()== null ? "" : dto.getDescription());
+            ui.getTxtValue().setValue(dto.getValue() == null ? "" : dto.getValue());
+            ui.getTxtPosition().setValue(dto.getPosition() == null ? "" : dto.getPosition());
+            ui.getTxaDescription().setValue(dto.getDescription() == null ? "" : dto.getDescription());
             ComponentUtils.fillDataCombo(ui.getCmbStatus(), Constants.EMPTY_CHARACTER, String.valueOf(dto.getStatus()), lstStatus);
         }
 
     }
 
     public void createDialog(boolean isInsert, Organization dto) {
-        OrganizationMngtUI ui = new OrganizationMngtUI();
-        Window window = new Window(isInsert ? BundleUtils.getString("common.button.add") : BundleUtils.getString("common.button.edit"), 
+        OrganizationMngtUI ui = new OrganizationMngtUI(isInsert ? BundleUtils.getString("common.button.add") : BundleUtils.getString("common.button.edit"));
+        Window window = new Window("",
                 ui);
         //window.setWidth("700px");
-        float height = UI.getCurrent().getWidth() * 3 / 4;
+        float height = UI.getCurrent().getWidth() * 1 / 3;
         window.setWidth(String.valueOf(height) + "%");
-        window.setIcon(VaadinIcons.CALENDAR_USER);
+//        window.setIcon(VaadinIcons.CALENDAR_USER);
         initDataDialog(ui, isInsert, dto);
         ui.getBtnSave().addClickListener(new Button.ClickListener() {
             @Override
@@ -273,6 +273,7 @@ public class OrganizationMngtController {
         window.setModal(true);
         DataUtil.reloadWindow(window);
         UI.getCurrent().addWindow(window);
+        ui.getTxtName().focus();
     }
 
     private void getDataFromUI(OrganizationMngtUI ui, Organization dto) {
@@ -286,7 +287,7 @@ public class OrganizationMngtController {
             dto.setStatus(status.getItemCode());
         }
     }
-    
+
     public boolean validateData(OrganizationMngtUI ui) {
         if (DataUtil.isNullOrEmpty(ui.getTxtName().getValue())) {
             Notification.show(BundleUtils.getString("orgMngt.list.name") + Constants.SPACE_CHARACTER + BundleUtils.getString("common.notnull"));

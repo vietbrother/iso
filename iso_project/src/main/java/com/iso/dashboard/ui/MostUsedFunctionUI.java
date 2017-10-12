@@ -40,11 +40,11 @@ public class MostUsedFunctionUI extends CustomComponent {
         Responsive.makeResponsive(mainLayout);
 
         Label mostUsedFuncTitle = new Label(" " + BundleUtils.getStringCas("menu.mostUsedFunc"));
-        mostUsedFuncTitle.addStyleName(ValoTheme.LABEL_H3);
+        mostUsedFuncTitle.addStyleName(ValoTheme.LABEL_H4);
         mostUsedFuncTitle.addStyleName(ValoTheme.LABEL_COLORED);
         mostUsedFuncTitle.addStyleName(ValoTheme.LABEL_BOLD);
         mostUsedFuncTitle.addStyleName(ValoTheme.LABEL_HUGE);
-        mainLayout.addComponent(mostUsedFuncTitle);
+//        mainLayout.addComponent(mostUsedFuncTitle);
 
         for (String viewName : lstMostUsedFunc) {
             Button btn = new Button(BundleUtils.getStringCas("menu." + viewName));

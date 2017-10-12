@@ -40,7 +40,10 @@ import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import java.util.List;
+import java.util.Map;
 //import com.vaadin.v7.ui.AbstractSelect.AcceptItem;
 //import com.vaadin.v7.ui.Table;
 
@@ -48,7 +51,7 @@ import com.vaadin.ui.themes.ValoTheme;
  * A responsive menu component providing user information and the controls for
  * primary navigation between the views.
  */
-@SuppressWarnings({ "serial", "unchecked" })
+@SuppressWarnings({"serial", "unchecked"})
 public final class DashboardMenu extends CustomComponent {
 
     public static final String ID = "dashboard-menu";
@@ -58,6 +61,9 @@ public final class DashboardMenu extends CustomComponent {
     private Label notificationsBadge;
     private Label reportsBadge;
     private MenuItem settingsItem;
+
+    public Map<String, String> mapParentMenu;
+    public Map<String, String> mapChildMenu;
 
     public DashboardMenu() {
         setPrimaryStyleName("valo-menu");
@@ -198,8 +204,41 @@ public final class DashboardMenu extends CustomComponent {
                 menuItemComponent = buildBadgeWrapper(menuItemComponent,
                         reportsBadge);
             }
+            if (view.isParentView()) {
+                if (view.isContainChild()) {
+                    Button parent = new ValoMenuItemButton(view);
+                    List<DashboardViewType> lstSubMenu = DashboardViewType.mapSubMenu.get(view.getViewName());
+                    VerticalLayout subMenuContent = new VerticalLayout();
+                    subMenuContent.setPrimaryStyleName("menuSubMenu");
+                    subMenuContent.setStyleName("menuSubMenuContent");
+                    subMenuContent.addStyleName("close");
+                    subMenuContent.setWidth("100%");
+                    subMenuContent.setMargin(false);
+                    subMenuContent.setSpacing(false);
+                    for (DashboardViewType subMenu : lstSubMenu) {
+                        Component child = new ValoMenuItemButton(subMenu);
+                        subMenuContent.addComponent(child);
+                    }
+                    menuItemsLayout.addComponent(parent);
+                    menuItemsLayout.addComponent(subMenuContent);
+                    subMenuContent.setVisible(false);
+                    parent.addClickListener(new ClickListener() {
 
-            menuItemsLayout.addComponent(menuItemComponent);
+                        @Override
+                        public void buttonClick(ClickEvent event) {
+                            if (subMenuContent.getStyleName().contains("close")) {
+                                subMenuContent.setVisible(true);
+                                subMenuContent.removeStyleName("close");
+                            } else {
+                                subMenuContent.setVisible(false);
+                                subMenuContent.addStyleName("close");
+                            }
+                        }
+                    });
+                } else {
+                    menuItemsLayout.addComponent(menuItemComponent);
+                }
+            }
         }
         return menuItemsLayout;
 
@@ -260,15 +299,17 @@ public final class DashboardMenu extends CustomComponent {
             this.view = view;
             setPrimaryStyleName("valo-menu-item");
             setIcon(view.getIcon());
-            setCaption(BundleUtils.getStringCas("menu."+view.getViewName()));
+            setCaption(BundleUtils.getStringCas("menu." + view.getViewName()));
             DashboardEventBus.register(this);
-            addClickListener(new ClickListener() {
-                @Override
-                public void buttonClick(final ClickEvent event) {
-                    UI.getCurrent().getNavigator()
-                            .navigateTo(view.getViewName());
-                }
-            });
+            if (!view.isContainChild()) {
+                addClickListener(new ClickListener() {
+                    @Override
+                    public void buttonClick(final ClickEvent event) {
+                        UI.getCurrent().getNavigator()
+                                .navigateTo(view.getViewName());
+                    }
+                });
+            }
 
         }
 
@@ -280,4 +321,5 @@ public final class DashboardMenu extends CustomComponent {
             }
         }
     }
+
 }
