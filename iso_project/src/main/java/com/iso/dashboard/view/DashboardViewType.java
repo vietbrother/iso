@@ -13,6 +13,9 @@ public enum DashboardViewType {
 
     DASHBOARD("dashboard", DashboardView.class, FontAwesome.HOME, true),
     USER_MNGT("userMngt", UserMngtView.class, FontAwesome.USERS, true),
+    FILE_MNGT("fileMngt", FileMngtView.class, FontAwesome.FILE, true),
+//    SECURITY_LEVEL_MNGT("selMngt", SecurityLevelMngtView.class, FontAwesome.FILE, true),
+    DOCUMENT_MNGT("documentMngt", DocumentMngtView.class, FontAwesome.FILE, true),
     ORGANIZATION_MNGT("organizationMngt", OrganizationMngtView.class, FontAwesome.SITEMAP, true),
     SALES("sales", SalesView.class, FontAwesome.BAR_CHART_O, false),
     REPORTS("reports", ReportsView.class, FontAwesome.FILE_TEXT_O, true),

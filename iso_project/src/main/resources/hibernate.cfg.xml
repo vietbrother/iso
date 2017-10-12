@@ -41,7 +41,10 @@ and open the template in the editor.
         <mapping class="com.iso.dashboard.dto.Student"/>
         <!--<mapping class="com.iso.dashboard.dto.User"/>-->
         <mapping class="com.iso.dashboard.dto.Users"/>
+        <mapping class="com.iso.dashboard.dto.SecurityLevel"/>
         <mapping class="com.iso.dashboard.dto.Organization"/>
+        <mapping class="com.iso.dashboard.dto.FileLevel"/>
+        <mapping class="com.iso.dashboard.dto.DocumentDTO"/>
          
     </session-factory>  
 </hibernate-configuration> 

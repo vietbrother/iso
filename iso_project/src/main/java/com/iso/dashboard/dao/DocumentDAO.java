@@ -5,11 +5,11 @@
  */
 package com.iso.dashboard.dao;
 
+import com.iso.dashboard.dto.DocumentDTO;
 import com.iso.dashboard.dto.ResultDTO;
 import com.iso.dashboard.dto.Users;
 import com.iso.dashboard.utils.Constants;
 import com.iso.dashboard.utils.DataUtil;
-import com.iso.dashboard.utils.HibernateUtil;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
@@ -17,32 +17,32 @@ import org.hibernate.Session;
 
 /**
  *
- * @author VIET_BROTHER
+ * @author 
  */
-public class UserDAO extends BaseDAO {
+public class DocumentDAO extends BaseDAO {
 
-    private static UserDAO dao;
+    private static DocumentDAO dao;
 
-    public static UserDAO getInstance() {
+    public static DocumentDAO getInstance() {
         if (dao == null) {
-            dao = new UserDAO();
+            dao = new DocumentDAO();
         }
         return dao;
     }
 
-    public List<Users> listUsers(String username) {
-        List<Users> listUsers = new ArrayList<>();
+    public List<DocumentDTO> listUsers(String fileName) {
+        List<DocumentDTO> listUsers = new ArrayList<>();
         Session session = null;
         try {
             session = getSession();
-            String sql = "FROM Users u "
-                    + (DataUtil.isNullOrEmpty(username) ? "" : ("where LOWER(u.username) like ? "))
-                    + "ORDER BY u.username ASC";
+            String sql = "FROM DocumentDTO u "
+                    + (DataUtil.isNullOrEmpty(fileName) ? "" : ("where LOWER(u.fileName) like ? "))
+                    + "ORDER BY u.fileName ASC";
             Query query = session.createQuery(sql);            
-            if (!DataUtil.isNullOrEmpty(username)) {
-                query.setParameter(0, "%" + username.toLowerCase() + "%");
+            if (!DataUtil.isNullOrEmpty(fileName)) {
+                query.setParameter(0, "%" + fileName.toLowerCase() + "%");
             }
-            listUsers = (List<Users>) query.list();
+            listUsers = (List<DocumentDTO>) query.list();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,7 +51,7 @@ public class UserDAO extends BaseDAO {
         return listUsers;
     }
 
-    public ResultDTO addUsers(Users p) {
+    public ResultDTO addUsers(DocumentDTO p) {
         ResultDTO res = new ResultDTO(Constants.FAIL, "");
         Session session = null;
         try {
@@ -71,20 +71,20 @@ public class UserDAO extends BaseDAO {
         return res;
     }
 
-    public ResultDTO updateUsers(Users newData) {
+    public ResultDTO updateUsers(DocumentDTO newData) {
         ResultDTO res = new ResultDTO(Constants.FAIL, "");
         Session session = null;
         try {
             session = getSession();
             session.beginTransaction();
-            Users u = (Users) session.get(Users.class, Integer.valueOf(newData.getId()));
-            u.setUsername(newData.getUsername());
-            u.setFirstName(newData.getFirstName());
-            u.setLastName(newData.getLastName());
-            u.setEmail(newData.getEmail());
-            u.setBirthDay(newData.getBirthDay());
-            u.setPhone(newData.getPhone());
-            u.setRole(newData.getRole());
+            DocumentDTO u = (DocumentDTO) session.get(DocumentDTO.class, Integer.valueOf(newData.getId()));
+            u.setFileCode(newData.getFileCode());
+            u.setFileName(newData.getFileName());
+            u.setFileType(newData.getFileType());
+            u.setSecurityLevel(newData.getSecurityLevel());
+            u.setStatus(newData.getStatus());
+            u.setPartStorageTime(newData.getPartStorageTime());
+            u.setDepartmentStorageTime(newData.getDepartmentStorageTime());
             session.update(u);
             //session.flush();
 //            getTransaction().commit();
@@ -104,7 +104,7 @@ public class UserDAO extends BaseDAO {
         try {
             session = getSession();
             session.beginTransaction();
-            Users u = (Users) session.get(Users.class, Integer.valueOf(id));
+            DocumentDTO u = (DocumentDTO) session.get(DocumentDTO.class, Integer.valueOf(id));
             session.delete(u);
             //session.flush();
 //            getTransaction().commit();
@@ -118,14 +118,14 @@ public class UserDAO extends BaseDAO {
         return res;
     }
 
-    public Users getUsersById(String id) {
+    public DocumentDTO getUsersById(String id) {
         ResultDTO res = new ResultDTO(Constants.FAIL, "");
         Session session = null;
-        Users users = null;
+        DocumentDTO users = null;
         try {
             session = getSession();
             session.beginTransaction();
-            users = (Users) session.get(Users.class, Integer.valueOf(id));
+            users = (DocumentDTO) session.get(DocumentDTO.class, Integer.valueOf(id));
             session.getTransaction().commit();
             session.close();
             res.setKey(Constants.SUCCESS);
