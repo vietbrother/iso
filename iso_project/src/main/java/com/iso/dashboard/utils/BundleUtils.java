@@ -8,7 +8,7 @@ package com.iso.dashboard.utils;
 //import com.iso.dashboard.component.CustomTable;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.CustomTable;
+//import com.vaadin.ui.CustomTable;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import java.util.HashMap;
@@ -40,21 +40,21 @@ public class BundleUtils {
     private volatile static ResourceBundle rsConfigSp = null;
     private volatile static ResourceBundle rsConfigChangeManagement = null;
     private static Map<Integer, Table.Align> mapAlign;
-    private static Map<Integer, CustomTable.Align> mapAligns;
+//    private static Map<Integer, CustomTable.Align> mapAligns;
     static final Logger log = Logger.getLogger(BundleUtils.class);
 
     //mapAlign giup thuc hien set align cho cac cot trong bang
     //voi gia tri tuong ung: 1: can trai, 2: can phai, 3: can giua
-    static {
-        mapAligns = new HashMap<Integer, CustomTable.Align>();
-        mapAligns.put(1, CustomTable.Align.LEFT);
-        mapAligns.put(2, CustomTable.Align.RIGHT);
-        mapAligns.put(3, CustomTable.Align.CENTER);
-        mapAlign = new HashMap<Integer, Table.Align>();
-        mapAlign.put(1, Table.Align.LEFT);
-        mapAlign.put(2, Table.Align.RIGHT);
-        mapAlign.put(3, Table.Align.CENTER);
-    }
+//    static {
+//        mapAligns = new HashMap<Integer, CustomTable.Align>();
+//        mapAligns.put(1, CustomTable.Align.LEFT);
+//        mapAligns.put(2, CustomTable.Align.RIGHT);
+//        mapAligns.put(3, CustomTable.Align.CENTER);
+//        mapAlign = new HashMap<Integer, Table.Align>();
+//        mapAlign.put(1, Table.Align.LEFT);
+//        mapAlign.put(2, Table.Align.RIGHT);
+//        mapAlign.put(3, Table.Align.CENTER);
+//    }
 
     public static String getString(String key, Locale... locale) {
         try {
@@ -210,36 +210,36 @@ public class BundleUtils {
         return headerData;
     }
 
-    public static LinkedHashMap<String, CustomTable.Align> getHeadersFilter(String key) {
-        String headerList = BundleUtils.getConfigString(key);
-        String[] headers = headerList.split(",");
-        LinkedHashMap<String, CustomTable.Align> headerData = new LinkedHashMap<String, CustomTable.Align>();
-        for (int i = 0; i < headers.length; i++) {
-            String[] headerDataType = headers[i].split(SEPARATOR);
-            headerData.put(headerDataType[0], mapAligns.get(Integer.parseInt(headerDataType[1])));
-        }
-        return headerData;
-    }
-
-    public static LinkedHashMap<String, CustomTable.Align> getHeadersFilterFromDB(String headerList) {
-        String[] headers = headerList.split(",");
-        LinkedHashMap<String, CustomTable.Align> headerData = new LinkedHashMap<String, CustomTable.Align>();
-        for (int i = 0; i < headers.length; i++) {
-            String[] headerDataType = headers[i].split(SEPARATOR);
-            headerData.put(headerDataType[0], mapAligns.get(Integer.parseInt(headerDataType[1])));
-        }
-        return headerData;
-    }
-
-    public static LinkedHashMap<String, CustomTable.Align> getHeadersFilterConfig(String headerList) {
-        String[] headers = headerList.split(",");
-        LinkedHashMap<String, CustomTable.Align> headerData = new LinkedHashMap<String, CustomTable.Align>();
-        for (int i = 0; i < headers.length; i++) {
-            String[] headerDataType = headers[i].split(SEPARATOR);
-            headerData.put(headerDataType[0], mapAligns.get(Integer.parseInt(headerDataType[1])));
-        }
-        return headerData;
-    }
+//    public static LinkedHashMap<String, CustomTable.Align> getHeadersFilter(String key) {
+//        String headerList = BundleUtils.getConfigString(key);
+//        String[] headers = headerList.split(",");
+//        LinkedHashMap<String, CustomTable.Align> headerData = new LinkedHashMap<String, CustomTable.Align>();
+//        for (int i = 0; i < headers.length; i++) {
+//            String[] headerDataType = headers[i].split(SEPARATOR);
+//            headerData.put(headerDataType[0], mapAligns.get(Integer.parseInt(headerDataType[1])));
+//        }
+//        return headerData;
+//    }
+//
+//    public static LinkedHashMap<String, CustomTable.Align> getHeadersFilterFromDB(String headerList) {
+//        String[] headers = headerList.split(",");
+//        LinkedHashMap<String, CustomTable.Align> headerData = new LinkedHashMap<String, CustomTable.Align>();
+//        for (int i = 0; i < headers.length; i++) {
+//            String[] headerDataType = headers[i].split(SEPARATOR);
+//            headerData.put(headerDataType[0], mapAligns.get(Integer.parseInt(headerDataType[1])));
+//        }
+//        return headerData;
+//    }
+//
+//    public static LinkedHashMap<String, CustomTable.Align> getHeadersFilterConfig(String headerList) {
+//        String[] headers = headerList.split(",");
+//        LinkedHashMap<String, CustomTable.Align> headerData = new LinkedHashMap<String, CustomTable.Align>();
+//        for (int i = 0; i < headers.length; i++) {
+//            String[] headerDataType = headers[i].split(SEPARATOR);
+//            headerData.put(headerDataType[0], mapAligns.get(Integer.parseInt(headerDataType[1])));
+//        }
+//        return headerData;
+//    }
 
     static Page getString(String string, Notification.Type type) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -268,6 +268,11 @@ public class BundleUtils {
             lstColumns[i] = BundleUtils.getString(prefix + "." + lstColumnsKey[i]);
         }
         return lstColumns;
+    }
+    public static String[] getHeaderColumn(String key){
+        String lstColumnsVal = BundleUtils.getStringCas(key);
+        String[] lstColumnsKey = lstColumnsVal.split(SEPARATOR);
+        return lstColumnsKey;
     }
         
     public static String[] getHeaderColumnVisible(String key){

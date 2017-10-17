@@ -5,7 +5,8 @@
  */
 package com.iso.dashboard.view;
 
-import com.iso.dashboard.component.CommonTableFilterPanel;
+//import com.iso.dashboard.component.CommonTableFilterPanel;
+import com.iso.dashboard.component.CustomGrid;
 import com.iso.dashboard.component.CustomPageTable;
 import com.iso.dashboard.controller.UserMngtController;
 import com.iso.dashboard.dto.User;
@@ -53,8 +54,9 @@ public class UserMngtView extends Panel implements View {
     private Button btnAdd;
     private Button btnExport;
 
-    private CommonTableFilterPanel commonTableFilterPanel;
-    private CustomPageTable pagedTable;
+//    private CommonTableFilterPanel commonTableFilterPanel;
+    private CustomGrid pagedTable;
+//    private CustomPageTable pagedTable;
 
     public List<User> userList = new ArrayList<>();
 
@@ -151,9 +153,11 @@ public class UserMngtView extends Panel implements View {
         }
         VerticalLayout tableLayout = new VerticalLayout();
         tableLayout.setSizeFull();
-        CustomPageTable table = createTable();
+//        CustomPageTable table = createTable();
+//        tableLayout.addComponent(table);
+//        tableLayout.addComponent(table.createControls("10"));
+        CustomGrid table = createTable();
         tableLayout.addComponent(table);
-        tableLayout.addComponent(table.createControls("10"));
         mainLayout.addComponent(tableLayout);
         mainLayout.setComponentAlignment(tableLayout, Alignment.MIDDLE_LEFT);
 
@@ -184,9 +188,11 @@ public class UserMngtView extends Panel implements View {
         return mainLayout;
     }
 
-    public CustomPageTable createTable() {
-        pagedTable = new CustomPageTable(
-                BundleUtils.getString("common.result"));
+//    public CustomPageTable createTable() {
+    public CustomGrid createTable() {
+//        pagedTable = new CustomPageTable(
+//                BundleUtils.getString("common.result"));
+        pagedTable = new CustomGrid();
 
         return pagedTable;
     }
@@ -266,18 +272,6 @@ public class UserMngtView extends Panel implements View {
         return buttonForm;
     }
 
-    private HorizontalLayout buildResultForm() {
-        HorizontalLayout resultForm = new HorizontalLayout();
-        resultForm.setWidth("100%");
-        resultForm.setHeight(Constants.STYLE_CONF.AUTO_VALUE);
-
-        commonTableFilterPanel = new CommonTableFilterPanel();
-        commonTableFilterPanel.setImmediate(true);
-        commonTableFilterPanel.setWidth("100.0%");
-        commonTableFilterPanel.setHeight(Constants.STYLE_CONF.AUTO_VALUE);
-        resultForm.addComponent(commonTableFilterPanel);
-        return resultForm;
-    }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
@@ -324,13 +318,7 @@ public class UserMngtView extends Panel implements View {
         this.btnExport = btnExport;
     }
 
-    public CommonTableFilterPanel getCommonTableFilterPanel() {
-        return commonTableFilterPanel;
-    }
 
-    public void setCommonTableFilterPanel(CommonTableFilterPanel commonTableFilterPanel) {
-        this.commonTableFilterPanel = commonTableFilterPanel;
-    }
 
     public Button getBtnAdd() {
         return btnAdd;
@@ -340,11 +328,19 @@ public class UserMngtView extends Panel implements View {
         this.btnAdd = btnAdd;
     }
 
-    public CustomPageTable getPagedTable() {
+//    public CustomPageTable getPagedTable() {
+//        return pagedTable;
+//    }
+//
+//    public void setPagedTable(CustomPageTable pagedTable) {
+//        this.pagedTable = pagedTable;
+//    }
+
+    public CustomGrid getPagedTable() {
         return pagedTable;
     }
 
-    public void setPagedTable(CustomPageTable pagedTable) {
+    public void setPagedTable(CustomGrid pagedTable) {
         this.pagedTable = pagedTable;
     }
 

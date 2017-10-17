@@ -5,6 +5,7 @@
  */
 package com.iso.dashboard.controller;
 
+import com.iso.dashboard.component.CustomGrid;
 import com.iso.dashboard.component.CustomPageTable;
 import com.iso.dashboard.dto.CatItemDTO;
 import com.iso.dashboard.dto.ResultDTO;
@@ -19,6 +20,7 @@ import com.iso.dashboard.utils.CommonExport;
 import com.iso.dashboard.utils.ComponentUtils;
 import com.iso.dashboard.utils.Constants;
 import com.iso.dashboard.utils.DataUtil;
+import com.iso.dashboard.utils.DateUtil;
 import com.iso.dashboard.utils.HibernateUtil;
 import com.iso.dashboard.utils.ISOIcons;
 import com.iso.dashboard.view.UserMngtView;
@@ -30,6 +32,7 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.server.Resource;
 import com.vaadin.server.VaadinService;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -57,10 +60,12 @@ public class UserMngtController {
     UserMngtView view;
     UserMngService service;
 
-    CustomPageTable pagedTable;
+    CustomGrid pagedTable;
+//    CustomPageTable pagedTable;
 //    String[] headerName = new String[]{"Id", "Username", "Email", "Phone", ""};
     String prefix = "userMngt.list";//tien to trong file language
     String headerKey = "header.userMngt";//lay trong file cas
+    String[] headerColumn = BundleUtils.getHeaderColumn(headerKey);
     String[] headerName = BundleUtils.getHeaderColumnName(prefix, headerKey);
     String userListLabel = "userMngt.list";
     Resource resource;
@@ -70,112 +75,159 @@ public class UserMngtController {
         this.pagedTable = view.getPagedTable();
         initTable(UserMngService.getInstance().listUsers(null));
         doAction();
+//        reloadData(UserMngService.getInstance().listUsers(null));
     }
 
     public void initTable(List<Users> lstUsers) {
-//        pagedTable.addGeneratedColumn("stt", new Table.ColumnGenerator() {
+////        pagedTable.addGeneratedColumn("stt", new Table.ColumnGenerator() {
+////
+////            @Override
+////            public Object generateCell(Table source, Object itemId, Object columnId) {
+////                List lstObj = (List) source.getItemIds();
+////                int i = lstObj.indexOf(itemId);
+////                return i + 1;
+////            }
+////        });
+//        pagedTable.addGeneratedColumn("action", new Table.ColumnGenerator() {
+////            private static final long serialVersionUID = -5042109683675242407L;
 //
-//            @Override
-//            public Object generateCell(Table source, Object itemId, Object columnId) {
-//                List lstObj = (List) source.getItemIds();
-//                int i = lstObj.indexOf(itemId);
-//                return i + 1;
+//            public Component generateCell(Table source, Object itemId, Object columnId) {
+//                Item item = source.getItem(itemId);
+//
+//                Button btnEdit = new Button();
+//                btnEdit.setIcon(FontAwesome.EDIT);
+//                btnEdit.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+//                btnEdit.setDescription(BundleUtils.getString("common.button.edit"));
+//                btnEdit.addClickListener(new Button.ClickListener() {
+//
+//                    @Override
+//                    public void buttonClick(Button.ClickEvent event) {
+//                        String userId = (String) item.getItemProperty("id").getValue();
+//                        Notification.show("Edit " + userId);
+//                        Users dto = UserMngService.getInstance().getUserById(userId);
+//                        onUpdate(dto);
+//                        view.getBtnSearch().click();
+//                    }
+//                });
+//                Button btnDelete = new Button();
+//                btnDelete.setIcon(ISOIcons.DELETE);
+//                btnDelete.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+//                btnDelete.setDescription(BundleUtils.getString("common.button.delete"));
+//                btnDelete.addClickListener(new Button.ClickListener() {
+//
+//                    @Override
+//                    public void buttonClick(Button.ClickEvent event) {
+//                        ConfirmDialog d = ConfirmDialog.show(
+//                                UI.getCurrent(),
+//                                BundleUtils.getString("message.warning.title"),
+//                                BundleUtils.getString("message.warning.content"),
+//                                BundleUtils.getString("common.confirmDelete.yes"),
+//                                BundleUtils.getString("common.confirmDelete.no"),
+//                                new ConfirmDialog.Listener() {
+//
+//                                    public void onClose(ConfirmDialog dialog) {
+//                                        if (dialog.isConfirmed()) {
+//                                            // Confirmed to continue
+//                                            String userId = (String) item.getItemProperty("id").getValue();
+//                                            ResultDTO res = UserMngService.getInstance().removeUser(userId);
+//                                            ComponentUtils.showNotification("Delete id : " + userId + " " + res.getKey() + " " + res.getMessage());
+//                                            view.getBtnSearch().click();
+//                                        }
+//                                    }
+//                                });
+//                        d.setStyleName(Reindeer.WINDOW_LIGHT);
+//                        d.setContentMode(ConfirmDialog.ContentMode.HTML);
+//                        d.getOkButton().setIcon(ISOIcons.SAVE);
+//                        d.getCancelButton().setIcon(ISOIcons.CANCEL);
+//                    }
+//                });
+//
+//                HorizontalLayout hori = new HorizontalLayout();
+//                hori.setSizeFull();
+//                hori.addComponent(btnEdit);
+//                hori.setComponentAlignment(btnEdit, Alignment.MIDDLE_RIGHT);
+//                hori.addComponent(btnDelete);
+//                hori.setComponentAlignment(btnDelete, Alignment.MIDDLE_LEFT);
+//                return hori;
 //            }
 //        });
-        pagedTable.addGeneratedColumn("action", new Table.ColumnGenerator() {
-//            private static final long serialVersionUID = -5042109683675242407L;
+//        reloadData(lstUsers);
+//        pagedTable.setSizeFull();
+//        //pagedTable.setRowHeaderMode(Table.RowHeaderMode.ICON_ONLY);
+////        pagedTable.setWidth("1000px");
+//        pagedTable.setPageLength(10);
+//        pagedTable.setImmediate(true);
+////        pagedTable.setSelectable(true);
+//        pagedTable.setAlwaysRecalculateColumnWidths(true);
+//        pagedTable.setResponsive(true);
+//        pagedTable.setColumnHeaders(headerName);
+//        pagedTable.setVisibleColumns(BundleUtils.getStringCas("header.userMngt").split("#"));
 
-            public Component generateCell(Table source, Object itemId, Object columnId) {
-                Item item = source.getItem(itemId);
+        IndexedContainer container = createContainer(lstUsers);
+        pagedTable.genGrid(container, prefix, headerColumn, null, new HandlerButtonActionGrid() {
 
-                Button btnEdit = new Button();
-                btnEdit.setIcon(FontAwesome.EDIT);
-                btnEdit.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-                btnEdit.setDescription(BundleUtils.getString("common.button.edit"));
-                btnEdit.addClickListener(new Button.ClickListener() {
+            @Override
+            public void actionEdit(Object obj) {
+                onUpdate((Users) obj);
+                view.getBtnSearch().click();
+            }
 
-                    @Override
-                    public void buttonClick(Button.ClickEvent event) {
-                        String userId = (String) item.getItemProperty("id").getValue();
-                        Notification.show("Edit " + userId);
-                        Users dto = UserMngService.getInstance().getUserById(userId);
-                        onUpdate(dto);
-                        view.getBtnSearch().click();
-                    }
-                });
-                Button btnDelete = new Button();
-                btnDelete.setIcon(ISOIcons.DELETE);
-                btnDelete.setStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-                btnDelete.setDescription(BundleUtils.getString("common.button.delete"));
-                btnDelete.addClickListener(new Button.ClickListener() {
+            @Override
+            public void actionDelete(Object obj) {
+                ConfirmDialog d = ConfirmDialog.show(
+                        UI.getCurrent(),
+                        BundleUtils.getString("message.warning.title"),
+                        BundleUtils.getString("message.warning.content"),
+                        BundleUtils.getString("common.confirmDelete.yes"),
+                        BundleUtils.getString("common.confirmDelete.no"),
+                        new ConfirmDialog.Listener() {
 
-                    @Override
-                    public void buttonClick(Button.ClickEvent event) {
-                        ConfirmDialog d = ConfirmDialog.show(
-                                UI.getCurrent(),
-                                BundleUtils.getString("message.warning.title"),
-                                BundleUtils.getString("message.warning.content"),
-                                BundleUtils.getString("common.confirmDelete.yes"),
-                                BundleUtils.getString("common.confirmDelete.no"),
-                                new ConfirmDialog.Listener() {
+                            public void onClose(ConfirmDialog dialog) {
+                                if (dialog.isConfirmed()) {
+                                    // Confirmed to continue
+                                    Users user = (Users) obj;
+                                    ResultDTO res = UserMngService.getInstance().removeUser(String.valueOf(user.getId()));
+                                    ComponentUtils.showNotification("Delete id : " + String.valueOf(user.getId()) + " " + res.getKey() + " " + res.getMessage());
+                                    view.getBtnSearch().click();
+                                }
+                            }
+                        });
+                d.setStyleName(Reindeer.WINDOW_LIGHT);
+                d.setContentMode(ConfirmDialog.ContentMode.HTML);
+                d.getOkButton().setIcon(ISOIcons.SAVE);
+                d.getCancelButton().setIcon(ISOIcons.CANCEL);
+            }
 
-                                    public void onClose(ConfirmDialog dialog) {
-                                        if (dialog.isConfirmed()) {
-                                            // Confirmed to continue
-                                            String userId = (String) item.getItemProperty("id").getValue();
-                                            ResultDTO res = UserMngService.getInstance().removeUser(userId);
-                                            ComponentUtils.showNotification("Delete id : " + userId + " " + res.getKey() + " " + res.getMessage());
-                                            view.getBtnSearch().click();
-                                        }
-                                    }
-                                });
-                        d.setStyleName(Reindeer.WINDOW_LIGHT);
-                        d.setContentMode(ConfirmDialog.ContentMode.HTML);
-                        d.getOkButton().setIcon(ISOIcons.SAVE);
-                        d.getCancelButton().setIcon(ISOIcons.CANCEL);
-                    }
-                });
-
-                HorizontalLayout hori = new HorizontalLayout();
-                hori.addComponent(btnEdit);
-                hori.addComponent(btnDelete);
-                return hori;
+            @Override
+            public void actionSelect(Object obj) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         });
-        reloadData(lstUsers);
-        pagedTable.setSizeFull();
-        //pagedTable.setRowHeaderMode(Table.RowHeaderMode.ICON_ONLY);
-//        pagedTable.setWidth("1000px");
-        pagedTable.setPageLength(10);
-        pagedTable.setImmediate(true);
-        pagedTable.setSelectable(true);
-        pagedTable.setAlwaysRecalculateColumnWidths(true);
-        pagedTable.setResponsive(true);
-        pagedTable.setColumnHeaders(headerName);
-        pagedTable.setVisibleColumns(BundleUtils.getStringCas("header.userMngt").split("#"));
     }
 
     public IndexedContainer createContainer(List<Users> lstUser) {
         IndexedContainer container = new IndexedContainer();
 //        container.addContainerProperty("stt", String.class, null);
 //        container.addContainerProperty("action", String.class, null);
-        container.addContainerProperty("id", String.class, null);
+//        container.addContainerProperty("id", String.class, null);
         container.addContainerProperty("username", String.class, null);
         container.addContainerProperty("email", String.class, null);
         container.addContainerProperty("phone", String.class, null);
+        container.addContainerProperty("birthday", String.class, null);
         for (Users u : lstUser) {
             Item item = container.addItem(u);
-            item.getItemProperty("id").setValue(String.valueOf(u.getId()));
+//            item.getItemProperty("id").setValue(String.valueOf(u.getId()));
             item.getItemProperty("username").setValue(u.getUsername());
             item.getItemProperty("email").setValue(u.getEmail());
             item.getItemProperty("phone").setValue(u.getPhone());
+            item.getItemProperty("birthday").setValue(DateUtil.date2ddMMyyyyHHMMss(u.getBirthDay()));
         }
-        container.sort(new Object[]{"id"}, new boolean[]{true});
+        //container.sort(new Object[]{"id"}, new boolean[]{true});
         return container;
     }
 
     public void reloadData(List<Users> lstUsers) {
-        pagedTable.setContainerDataSource(createContainer(lstUsers));
+        pagedTable.setContainerDataSource(pagedTable.createWrapContainer(createContainer(lstUsers)));
     }
 
     private void doAction() {

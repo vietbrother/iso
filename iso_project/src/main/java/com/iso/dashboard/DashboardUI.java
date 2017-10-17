@@ -17,6 +17,7 @@ import com.iso.dashboard.event.DashboardEvent.UserLoginRequestedEvent;
 import com.iso.dashboard.event.DashboardEventBus;
 import com.iso.dashboard.view.LoginView;
 import com.iso.dashboard.view.MainView;
+import com.vaadin.annotations.JavaScript;
 import com.vaadin.server.Page;
 import com.vaadin.server.Page.BrowserWindowResizeEvent;
 import com.vaadin.server.Page.BrowserWindowResizeListener;
@@ -30,6 +31,7 @@ import com.vaadin.ui.themes.ValoTheme;
 @Theme("dashboard")
 @Widgetset("com.iso.dashboard.DashboardWidgetSet")
 @Title("ISO Dashboard")
+@JavaScript({"vaadin://js/Chart.min.js", "vaadin://js/chartjs-connector.js"})
 @SuppressWarnings("serial")
 public final class DashboardUI extends UI {
 

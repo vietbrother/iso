@@ -19,11 +19,10 @@ import org.hibernate.type.StandardBasicTypes;
 public abstract class BaseDAO {
 
     public Session getSession() {
-//        return HibernateUtil.getSessionAndBeginTransaction();
-        return HibernateUtil.getSessionFactory().openSession();
+        return HibernateUtil.getSessionAndBeginTransaction();
     }
-    
-        public Date getSysdate()
+
+    public Date getSysdate()
             throws Exception {
         String strQuery = "SELECT SYSDATE as system_datetime ";
         SQLQuery queryObject = getSession().createSQLQuery(strQuery);

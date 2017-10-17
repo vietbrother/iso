@@ -9,7 +9,6 @@ import com.iso.dashboard.dto.ResultDTO;
 import com.iso.dashboard.dto.Organization;
 import com.iso.dashboard.utils.Constants;
 import com.iso.dashboard.utils.DataUtil;
-import com.iso.dashboard.utils.HibernateUtil;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
@@ -35,7 +34,6 @@ public class OrganizationDAO extends BaseDAO {
         Session session = null;
         try {
             session = getSession();
-            session.beginTransaction();
             String sql = "FROM Organization org where 1 = 1 "
                     + (DataUtil.isNullOrEmpty(id) ? "" : ("and org.id = ? "))
                     + (DataUtil.isNullOrEmpty(parentId) ? "" : ("and org.parentId = ? "))
@@ -52,8 +50,10 @@ public class OrganizationDAO extends BaseDAO {
             listOrganization = (List<Organization>) query.list();
 
             session.getTransaction().commit();
-            session.close();
         } catch (Exception e) {
+            if(session != null && session.isOpen()){
+                session.getTransaction().rollback();
+            }
             e.printStackTrace();
         }
 
@@ -65,14 +65,15 @@ public class OrganizationDAO extends BaseDAO {
         Session session = null;
         try {
             session = getSession();
-            session.beginTransaction();
             int id = (Integer) session.save(addObj);
             //session.flush();
             session.getTransaction().commit();
-            session.close();
             res.setId(String.valueOf(id));
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
+            if(session != null && session.isOpen()){
+                session.getTransaction().rollback();
+            }
             e.printStackTrace();
             res.setMessage(e.getMessage());
         }
@@ -84,7 +85,6 @@ public class OrganizationDAO extends BaseDAO {
         Session session = null;
         try {
             session = getSession();
-            session.beginTransaction();
             Organization updateObj = (Organization) session.get(Organization.class, Integer.valueOf(newData.getId()));
             updateObj.setName(newData.getName());
             updateObj.setCode(newData.getCode());
@@ -94,12 +94,13 @@ public class OrganizationDAO extends BaseDAO {
             session.update(updateObj);
             //session.flush();
             session.getTransaction().commit();
-            session.close();
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
+            if(session != null && session.isOpen()){
+                session.getTransaction().rollback();
+            }
             e.printStackTrace();
             res.setMessage(e.getMessage());
-            HibernateUtil.getSessionFactory().openSession();
 
         }
         return res;
@@ -110,14 +111,14 @@ public class OrganizationDAO extends BaseDAO {
         Session session = null;
         try {
             session = getSession();
-            session.beginTransaction();
             Organization org = (Organization) session.get(Organization.class, Integer.valueOf(id));
             session.delete(org);
             session.getTransaction().commit();
-            session.close();
-//            session.flush();
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
+            if(session != null && session.isOpen()){
+                session.getTransaction().rollback();
+            }
             res.setMessage(e.getMessage());
             e.printStackTrace();
         }
@@ -130,12 +131,13 @@ public class OrganizationDAO extends BaseDAO {
         Organization org = null;
         try {
             session = getSession();
-            session.beginTransaction();
             org = (Organization) session.get(Organization.class, Integer.valueOf(id));
             session.getTransaction().commit();
-            session.close();
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
+            if(session != null && session.isOpen()){
+                session.getTransaction().rollback();
+            }
             e.printStackTrace();
             res.setMessage(e.getMessage());
         }

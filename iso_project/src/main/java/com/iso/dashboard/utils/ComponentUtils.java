@@ -14,6 +14,7 @@ import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Notification;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +91,7 @@ public class ComponentUtils {
 
         CatItemDTO defaultValue;
         if (!DataUtil.isStringNullOrEmpty(valueDefault)) {
-            Map<String, CatItemDTO> map = new HashMap<String, CatItemDTO>();
+            Map<String, CatItemDTO> map = new HashMap<>();
             for (CatItemDTO comboObject : appPatamDTO) {
                 map.put(comboObject.getItemId(), comboObject);
             }
@@ -162,12 +163,25 @@ public class ComponentUtils {
         }
     }
 
-    public static void showNotification(String content){
-        Notification notification = new Notification(content);
+    public static void showNotification(String content) {
+        Notification notification = new Notification("<p style=\"font-family:verdana;\">" + content + "</p>");
+//        Notification notification = new Notification("<p style=\"font-family: 'Open Sans', Arial, Helvetica, sans-serif;\">" + content + "</p>");
         notification.setHtmlContentAllowed(true);
 //        notification.setStyleName("tray dark small closable login-help");
         notification.setPosition(Position.MIDDLE_CENTER);
-        notification.setDelayMsec(2000);
+        notification.setDelayMsec(2500);
         notification.show(Page.getCurrent());
+    }
+
+    public static void fillPercentCombo(ComboBox combo, String selectedValue) {
+        List<CatItemDTO> lstPercent = new ArrayList<>();
+        for (int i = 0; i < 101; i++) {
+            lstPercent.add(new CatItemDTO(String.valueOf(i), String.valueOf(i)));
+        }
+        if (!DataUtil.isNullOrEmpty(selectedValue)) {
+            ComponentUtils.fillDataCombo(combo, Constants.EMPTY_CHARACTER, selectedValue, lstPercent);
+        } else {
+            ComponentUtils.fillDataComboNoDefault(combo, Constants.EMPTY_CHARACTER, lstPercent);
+        }
     }
 }

@@ -69,7 +69,7 @@ public class UserMngtUI extends CustomComponent {
         mainLayout = new VerticalLayout();
         mainLayout.setCaption(this.caption);
         mainLayout.setIcon(FontAwesome.CALENDAR);
-        mainLayout.setSizeUndefined();
+        mainLayout.setSizeFull();
         mainLayout.setMargin(true);
         mainLayout.setSpacing(true);
         Responsive.makeResponsive(mainLayout);

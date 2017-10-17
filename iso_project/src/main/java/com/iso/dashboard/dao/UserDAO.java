@@ -9,7 +9,6 @@ import com.iso.dashboard.dto.ResultDTO;
 import com.iso.dashboard.dto.Users;
 import com.iso.dashboard.utils.Constants;
 import com.iso.dashboard.utils.DataUtil;
-import com.iso.dashboard.utils.HibernateUtil;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
@@ -43,8 +42,11 @@ public class UserDAO extends BaseDAO {
                 query.setParameter(0, "%" + username.toLowerCase() + "%");
             }
             listUsers = (List<Users>) query.list();
-
+            session.getTransaction().commit();
         } catch (Exception e) {
+            if(session != null && session.isOpen()){
+                session.getTransaction().rollback();
+            }
             e.printStackTrace();
         }
 
@@ -56,15 +58,14 @@ public class UserDAO extends BaseDAO {
         Session session = null;
         try {
             session = getSession();
-            session.beginTransaction();
             int id = (Integer) session.save(p);
-            //session.flush();
-//            getTransaction().commit();
             session.getTransaction().commit();
-            session.close();
             res.setId(String.valueOf(id));
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
+            if(session != null && session.isOpen()){
+                session.getTransaction().rollback();
+            }
             e.printStackTrace();
             res.setMessage(e.getMessage());
         }
@@ -76,7 +77,6 @@ public class UserDAO extends BaseDAO {
         Session session = null;
         try {
             session = getSession();
-            session.beginTransaction();
             Users u = (Users) session.get(Users.class, Integer.valueOf(newData.getId()));
             u.setUsername(newData.getUsername());
             u.setFirstName(newData.getFirstName());
@@ -86,12 +86,12 @@ public class UserDAO extends BaseDAO {
             u.setPhone(newData.getPhone());
             u.setRole(newData.getRole());
             session.update(u);
-            //session.flush();
-//            getTransaction().commit();
             session.getTransaction().commit();
-            session.close();
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
+            if(session != null && session.isOpen()){
+                session.getTransaction().rollback();
+            }
             e.printStackTrace();
             res.setMessage(e.getMessage());
         }
@@ -103,15 +103,14 @@ public class UserDAO extends BaseDAO {
         Session session = null;
         try {
             session = getSession();
-            session.beginTransaction();
             Users u = (Users) session.get(Users.class, Integer.valueOf(id));
             session.delete(u);
-            //session.flush();
-//            getTransaction().commit();
             session.getTransaction().commit();
-            session.close();
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
+            if(session != null && session.isOpen()){
+                session.getTransaction().rollback();
+            }
             res.setMessage(e.getMessage());
             e.printStackTrace();
         }
@@ -124,12 +123,13 @@ public class UserDAO extends BaseDAO {
         Users users = null;
         try {
             session = getSession();
-            session.beginTransaction();
             users = (Users) session.get(Users.class, Integer.valueOf(id));
             session.getTransaction().commit();
-            session.close();
             res.setKey(Constants.SUCCESS);
         } catch (Exception e) {
+            if(session != null && session.isOpen()){
+                session.getTransaction().rollback();
+            }
             e.printStackTrace();
             res.setMessage(e.getMessage());
         }

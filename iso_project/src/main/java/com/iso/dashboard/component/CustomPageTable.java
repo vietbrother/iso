@@ -75,7 +75,7 @@ public class CustomPageTable extends Table {
     public CustomPageTable(String caption) {
         super(caption);
         setPageLength(10);
-        addStyleName("pagedtable");
+//        addStyleName("pagedtable");
     }
 
     public HorizontalLayout createControls(String pageSizeDefault) {
@@ -89,6 +89,7 @@ public class CustomPageTable extends Table {
         itemsPerPageSelect.setImmediate(true);
         itemsPerPageSelect.setNullSelectionAllowed(false);
         itemsPerPageSelect.setWidth("80px");
+        itemsPerPageSelect.setHeight("34px");
         itemsPerPageSelect.addValueChangeListener(new Property.ValueChangeListener() {
             private static final long serialVersionUID = -2255853716069800092L;
 
@@ -234,29 +235,26 @@ public class CustomPageTable extends Table {
                 Alignment.MIDDLE_CENTER);
         controlBar.setWidth("100%");
         controlBar.setExpandRatio(pageSize, 1);
-        addListener(new PageChangeListener() {
-            @Override
-            public void pageChanged(PagedTableChangeEvent event) {
-//                int abc = event.getCurrentPage();
-                first.setEnabled(container.getStartIndex() > 0);
-                previous.setEnabled(container.getStartIndex() > 0);
-                next.setEnabled(container.getStartIndex() < container
-                        .getRealSize() - getPageLength());
-                last.setEnabled(container.getStartIndex() < container
-                        .getRealSize() - getPageLength());
-                currentPageTextField.setValue(String.valueOf(getCurrentPage()));
-                totalPagesLabel.setValue(String.valueOf(getTotalAmountOfPages()));
-                if (resizePage) {
-                    int lenght = getPageLength();
-                    int a = lenght % 5;
-                    int b = lenght / 5;
-                    if (a != 0) {
-                        int pageLenght = 5 * (b + 1);
-                        itemsPerPageSelect.setValue(pageLenght);
-                    }
+        addListener((PagedTableChangeEvent event) -> {
+            //                int abc = event.getCurrentPage();
+            first.setEnabled(container.getStartIndex() > 0);
+            previous.setEnabled(container.getStartIndex() > 0);
+            next.setEnabled(container.getStartIndex() < container
+                    .getRealSize() - getPageLength());
+            last.setEnabled(container.getStartIndex() < container
+                    .getRealSize() - getPageLength());
+            currentPageTextField.setValue(String.valueOf(getCurrentPage()));
+            totalPagesLabel.setValue(String.valueOf(getTotalAmountOfPages()));
+            if (resizePage) {
+                int lenght = getPageLength();
+                int a = lenght % 5;
+                int b = lenght / 5;
+                if (a != 0) {
+                    int pageLenght = 5 * (b + 1);
+                    itemsPerPageSelect.setValue(pageLenght);
                 }
-                separatorTotal.setValue(String.valueOf(container.getRealSize()));
             }
+            separatorTotal.setValue(String.valueOf(container.getRealSize()));
         });
         return controlBar;
     }
@@ -327,9 +325,9 @@ public class CustomPageTable extends Table {
                 }
             });
             if (alwaysRecalculateColumnWidths) {
-                for (Object columnId : container.getContainerPropertyIds()) {
+                container.getContainerPropertyIds().stream().forEach((columnId) -> {
                     setColumnWidth(columnId, -1);
-                }
+                });
             }
             firePagedChangedEvent();
         }
@@ -338,9 +336,9 @@ public class CustomPageTable extends Table {
     private void firePagedChangedEvent() {
         if (listeners != null) {
             PagedTableChangeEvent event = new PagedTableChangeEvent(this);
-            for (PageChangeListener listener : listeners) {
+            listeners.stream().forEach((listener) -> {
                 listener.pageChanged(event);
-            }
+            });
         }
     }
 
@@ -412,14 +410,14 @@ public class CustomPageTable extends Table {
 
     public void addListener(PageChangeListener listener) {
         if (listeners == null) {
-            listeners = new ArrayList<PageChangeListener>();
+            listeners = new ArrayList<>();
         }
         listeners.add(listener);
     }
 
     public void removeListener(PageChangeListener listener) {
         if (listeners == null) {
-            listeners = new ArrayList<PageChangeListener>();
+            listeners = new ArrayList<>();
         }
         listeners.remove(listener);
     }

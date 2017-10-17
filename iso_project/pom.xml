@@ -9,7 +9,7 @@
     <properties>
         <productionMode>false</productionMode>
         <!--<vaadin.version>8.0.1</vaadin.version>-->
-        <vaadin.version>7.6.5</vaadin.version>
+        <vaadin.version>7.7.9</vaadin.version>
         <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -131,8 +131,38 @@
     </profiles>
 
     <dependencies>
+        
         <dependency>
             <groupId>com.vaadin</groupId>
+            <artifactId>treegrid</artifactId>
+            <version>0.7-SNAPSHOT</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.vaadin.addons</groupId>
+            <artifactId>vaadin-grid-util</artifactId>
+            <version>1.1.1-SNAPSHOT</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.vaaadin</groupId>
+            <artifactId>transactional-container</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <!--            <artifactId>vaadin-push</artifactId>
+            <version>8.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client</artifactId>
+            <version>${vaadin.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>-->
             <artifactId>vaadin-server</artifactId>
             <version>${vaadin.version}</version>
         </dependency>
@@ -153,6 +183,12 @@
             <version>${vaadin.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!--        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client-compiled</artifactId>
+            <version>${vaadin.version}</version>
+            <scope>compile</scope>
+        </dependency>-->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-themes</artifactId>
@@ -218,13 +254,13 @@
             <version>1.2.17</version>
         </dependency>
         
-        <!--        <dependency>
+        <dependency>
             <groupId>org.vaadin.addons</groupId>
             <artifactId>pagedtable</artifactId>
             <version>0.6.5</version>
-            <version>0.7.0</version>
+            <!--<version>0.7.0</version>-->
             <type>jar</type>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>com.vaadin.addon</groupId>
             <artifactId>pagination</artifactId>
@@ -237,12 +273,12 @@
             <version>2.1.2</version>
             <type>jar</type>
         </dependency>
-        <dependency>
+        <!--        <dependency>
             <groupId>org.vaadin.addons</groupId>
             <artifactId>filteringtable</artifactId>
             <version>0.9.11.v7</version>
             <scope>compile</scope>
-        </dependency>
+        </dependency>-->
         <!--        <dependency>
             <groupId>de.steinwedel.vaadin.addon</groupId>
             <artifactId>messagebox</artifactId>
@@ -342,11 +378,11 @@
             <version>1.0.0.alpha4</version>
         </dependency>
         
-        <dependency>
+        <!--        <dependency>
             <groupId>org.vaadin.teemusa</groupId>
             <artifactId>gridextensionpack</artifactId>
             <version>2.0.0</version>
-        </dependency>
+        </dependency>-->
         
         <!-- MySQL -->
         <dependency>
@@ -407,6 +443,104 @@
             <artifactId>hibernate-c3p0</artifactId>
             <version>4.3.6.Final</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.wcs.wcslib</groupId>
+            <artifactId>wcslib-vaadin-widget-multifileupload</artifactId>
+            <version>2.0.3</version>
+            <!--<version>1.9</version>-->
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.hezamu</groupId>
+            <artifactId>canvas</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <!--        <dependency>
+            <groupId>com.google.gwt.event</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>1.6.0</version>
+        </dependency>-->
+        <!--        <dependency>
+            <groupId>com.google.gwt.event</groupId>
+            <artifactId>gwt-servlet</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.web.bindery</groupId>
+            <artifactId>requestfactory-server</artifactId>
+            <version>2.6.1</version>
+        </dependency>-->
+        
+        <!-- https://mvnrepository.com/artifact/com.google.gwt/gwt-user -->
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>2.7.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.gwt/gwt-servlet -->
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-servlet</artifactId>
+            <version>2.7.0</version>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.byteowls</groupId>
+            <artifactId>vaadin-chartjs</artifactId>
+            <version>0.4.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.vaadin.addon</groupId>
+            <artifactId>jfreechartwrapper</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
+
+        <!--        <dependency>
+            <groupId>at.downdrown.vaadinaddons</groupId>
+            <artifactId>highchartsapi</artifactId>
+            <version>2.2.0</version>
+        </dependency>-->
+        <!--        <dependency>
+            <groupId>org.vaadin.addons</groupId>
+            <artifactId>aceeditor</artifactId>
+            <version>0.8.14</version>
+        </dependency>-->
+
+        
+        
+        
+        <!--        <dependency>
+            <groupId>org.atmosphere</groupId>
+            <artifactId>atmosphere-runtime-native</artifactId>
+            <version>2.3.0-RC4</version>
+            <version>2.2.4</version>
+        </dependency>-->
+        <!--        <dependency>
+            <groupId>org.atmosphere</groupId>
+            <artifactId>atmosphere-runtime</artifactId>
+            <version>2.2.4</version>
+        </dependency>-->
+        
+        <!--        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-compatibility-client</artifactId>
+            <version>8.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.addon</groupId>
+            <artifactId>easyuploads</artifactId>
+            <version>7.4.10</version>
+        </dependency>-->
     </dependencies>
 
     <build>

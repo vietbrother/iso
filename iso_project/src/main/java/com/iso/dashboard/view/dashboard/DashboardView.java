@@ -1,5 +1,14 @@
 package com.iso.dashboard.view.dashboard;
 
+import com.byteowls.vaadin.chartjs.ChartJs;
+import com.byteowls.vaadin.chartjs.config.BarChartConfig;
+import com.byteowls.vaadin.chartjs.data.BarDataset;
+import com.byteowls.vaadin.chartjs.data.Dataset;
+import com.byteowls.vaadin.chartjs.options.InteractionMode;
+import com.byteowls.vaadin.chartjs.options.Position;
+import com.byteowls.vaadin.chartjs.options.scale.Axis;
+import com.byteowls.vaadin.chartjs.options.scale.LinearScale;
+import com.byteowls.vaadin.chartjs.utils.ColorUtils;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -15,6 +24,7 @@ import com.iso.dashboard.event.DashboardEventBus;
 import com.iso.dashboard.ui.MostUsedFunctionUI;
 import com.iso.dashboard.utils.BundleUtils;
 import com.iso.dashboard.view.dashboard.DashboardEdit.DashboardEditListener;
+import com.vaadin.annotations.JavaScript;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -40,7 +50,11 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import javax.swing.JPanel;
 import org.dussan.vaadin.dcharts.ChartImageFormat;
 import org.dussan.vaadin.dcharts.DCharts;
 import org.dussan.vaadin.dcharts.base.elements.XYaxis;
@@ -61,9 +75,22 @@ import org.dussan.vaadin.dcharts.options.Series;
 import org.dussan.vaadin.dcharts.options.SeriesDefaults;
 import org.dussan.vaadin.dcharts.renderers.legend.EnhancedLegendRenderer;
 import org.dussan.vaadin.dcharts.renderers.tick.AxisTickRenderer;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.BarRenderer3D;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.vaadin.addon.JFreeChartWrapper;
 //import com.vaadin.v7.ui.Table;
 
 @SuppressWarnings("serial")
+@JavaScript({"vaadin://js/Chart.min.js", "vaadin://js/chartjs-connector.js"})
 public final class DashboardView extends Panel implements View,
         DashboardEditListener {
 
@@ -114,17 +141,142 @@ public final class DashboardView extends Panel implements View,
 
         VerticalLayout vertical = new VerticalLayout();
         vertical.setMargin(true);
+        vertical.setWidth("100%");
 
+//        vertical.addComponent(buildChartDemo());
+        vertical.addComponent(chartDemo());
         vertical.addComponent(chartsDemo1());
 
         clMostUsedFunc.addComponent(vertical);
         return clMostUsedFunc;
     }
 
+    private JFreeChartWrapper chartDemo(){
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        dataset.addValue(10.0, "Series 1", "Category 1");
+        dataset.addValue(4.0, "Series 1", "Category 2");
+        dataset.addValue(15.0, "Series 1", "Category 3");
+        dataset.addValue(14.0, "Series 1", "Category 4");
+        dataset.addValue(-5.0, "Series 2", "Category 1");
+        dataset.addValue(-7.0, "Series 2", "Category 2");
+        dataset.addValue(14.0, "Series 2", "Category 3");
+        dataset.addValue(-3.0, "Series 2", "Category 4");
+        dataset.addValue(6.0, "Series 3", "Category 1");
+        dataset.addValue(17.0, "Series 3", "Category 2");
+        dataset.addValue(-12.0, "Series 3", "Category 3");
+        dataset.addValue(7.0, "Series 3", "Category 4");
+        dataset.addValue(7.0, "Series 4", "Category 1");
+        dataset.addValue(15.0, "Series 4", "Category 2");
+        dataset.addValue(11.0, "Series 4", "Category 3");
+        dataset.addValue(0.0, "Series 4", "Category 4");
+        dataset.addValue(-8.0, "Series 5", "Category 1");
+        dataset.addValue(-6.0, "Series 5", "Category 2");
+        dataset.addValue(10.0, "Series 5", "Category 3");
+        dataset.addValue(-9.0, "Series 5", "Category 4");
+        dataset.addValue(9.0, "Series 6", "Category 1");
+        dataset.addValue(8.0, "Series 6", "Category 2");
+        dataset.addValue(0.0, "Series 6", "Category 3");
+        dataset.addValue(6.0, "Series 6", "Category 4");
+        dataset.addValue(-10.0, "Series 7", "Category 1");
+        dataset.addValue(9.0, "Series 7", "Category 2");
+        dataset.addValue(7.0, "Series 7", "Category 3");
+        dataset.addValue(7.0, "Series 7", "Category 4");
+        dataset.addValue(11.0, "Series 8", "Category 1");
+        dataset.addValue(13.0, "Series 8", "Category 2");
+        dataset.addValue(9.0, "Series 8", "Category 3");
+        dataset.addValue(9.0, "Series 8", "Category 4");
+        dataset.addValue(-3.0, "Series 9", "Category 1");
+        dataset.addValue(7.0, "Series 9", "Category 2");
+        dataset.addValue(11.0, "Series 9", "Category 3");
+        dataset.addValue(-10.0, "Series 9", "Category 4");
+        
+        JFreeChart chart = ChartFactory.createBarChart3D(
+            "3D Bar Chart Demo",      // chart title
+            "Category",               // domain axis label
+            "Value",                  // range axis label
+            dataset,                  // data
+            PlotOrientation.VERTICAL, // orientation
+            true,                     // include legend
+            true,                     // tooltips
+            false);                   // urls
+
+        CategoryPlot plot = (CategoryPlot) chart.getPlot();
+        plot.setOutlineVisible(false);
+        plot.setDomainGridlinesVisible(true);
+        CategoryAxis axis = plot.getDomainAxis();
+        axis.setCategoryLabelPositions(
+                CategoryLabelPositions.createUpRotationLabelPositions(
+                        Math.PI / 8.0));
+        axis.setCategoryMargin(0.0);
+        BarRenderer3D renderer = (BarRenderer3D) plot.getRenderer();
+        renderer.setDrawBarOutline(false);
+        
+//        chart.getPlot().setBackgroundPaint(Color.WHITE);
+//        chart.setBackgroundPaint(Color.WHITE);
+        
+//        JPanel panel = new ChartPanel(chart);
+        return new JFreeChartWrapper(chart);
+    }
+    private ChartJs buildChartDemo() {
+        BarChartConfig barConfig = new BarChartConfig();
+        barConfig.
+                data()
+                .labels("January", "February", "March", "April", "May", "June", "July")
+                .addDataset(
+                        new BarDataset().backgroundColor("rgba(220,220,220,0.5)").label("Dataset 1").yAxisID("y-axis-1"))
+                .addDataset(
+                        new BarDataset().backgroundColor("rgba(151,187,205,0.5)").label("Dataset 2").yAxisID("y-axis-2").hidden(true))
+                .addDataset(
+                        new BarDataset().backgroundColor(
+                                ColorUtils.randomColor(0.7), ColorUtils.randomColor(0.7), ColorUtils.randomColor(0.7),
+                                ColorUtils.randomColor(0.7), ColorUtils.randomColor(0.7), ColorUtils.randomColor(0.7),
+                                ColorUtils.randomColor(0.7)).label("Dataset 3").yAxisID("y-axis-1"))
+                .and();
+        barConfig.
+                options()
+                .responsive(true)
+                .hover()
+                .mode(InteractionMode.INDEX)
+                .intersect(true)
+                .animationDuration(400)
+                .and()
+                .title()
+                .display(true)
+                .text("Chart.js Bar Chart - Multi Axis")
+                .and()
+                .scales()
+                .add(Axis.Y, new LinearScale().display(true).position(Position.LEFT).id("y-axis-1"))
+                .add(Axis.Y, new LinearScale().display(true).position(Position.RIGHT).id("y-axis-2").gridLines().drawOnChartArea(false).and())
+                .and()
+                .done();
+
+        List<String> labels = barConfig.data().getLabels();
+        for (Dataset<?, ?> ds : barConfig.data().getDatasets()) {
+            BarDataset lds = (BarDataset) ds;
+            List<Double> data = new ArrayList<>();
+            for (int i = 0; i < labels.size(); i++) {
+                data.add((Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100));
+            }
+            lds.dataAsList(data);
+        }
+
+        ChartJs chart = new ChartJs(barConfig);
+        chart.setJsLoggingEnabled(true);
+        chart.addClickListener(new ChartJs.DataPointClickListener() {
+
+            @Override
+            public void onDataPointClick(int datasetIndex, int dataIndex) {
+                Notification.show(barConfig.data().getDatasets().get(datasetIndex).toString());
+            }
+        });
+        return chart;
+    }
+
     private DCharts chartsDemo1() {
         DCharts chart = new DCharts();
-        chart.autoSelectDecimalAndThousandsSeparator(new Locale("sl", "SI"));
-        chart.setHeight("400px");
+//        chart.autoSelectDecimalAndThousandsSeparator(new Locale("sl", "SI"));
+//        chart.setHeight("400px");
+        chart.setWidth("100%");
         chart.setCaption("Demo");
 
         DataSeries dataSeries = new DataSeries();
@@ -227,7 +379,7 @@ public final class DashboardView extends Panel implements View,
 
         dashboardPanels.addComponent(buildMostUsedFunc());
         dashboardPanels.addComponent(buildNotes());
-        dashboardPanels.addComponent(buildPopularMovies());
+//        dashboardPanels.addComponent(buildPopularMovies());
 
         return dashboardPanels;
     }
@@ -248,8 +400,6 @@ public final class DashboardView extends Panel implements View,
         panel.addStyleName("notes");
         return panel;
     }
-
-
 
     private Component buildPopularMovies() {
         return createContentWrapper(new Button("buildPopularMovies"));
@@ -418,6 +568,7 @@ public final class DashboardView extends Panel implements View,
     }
 
     public static final class NotificationsButton extends Button {
+
         private static final String STYLE_UNREAD = "unread";
         public static final String ID = "dashboard-notifications";
 

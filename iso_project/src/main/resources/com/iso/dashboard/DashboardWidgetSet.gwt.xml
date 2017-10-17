@@ -33,13 +33,21 @@
 
     <inherits name="org.dussan.vaadin.dcharts.DchartsWidgetset" />
 
-    <inherits name="org.vaadin.hene.popupbutton.widgetset.PopupbuttonWidgetset" />
+    
 
-    <inherits name="org.tepi.filtertable.gwt.FilterTableWidgetset" />
+    
 
     <inherits name="com.vaadin.addon.responsive.ResponsiveWidgetSet" />
 
     
 
-    <inherits name="org.vaadin.teemusa.gridextensions.GridExtensionPackWidgetSet" />
+    
+
+    <inherits name="org.vaadin.hezamu.canvas.Widgetset" />
+
+    <inherits name="com.wcs.wcslib.vaadin.widget.multifileupload.WidgetSet" />
+
+    <inherits name="org.vaadin.treegrid.WidgetSet" />
+
+    <inherits name="org.vaadin.gridutil.WidgetSet" />
 </module>

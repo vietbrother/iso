@@ -7,8 +7,9 @@ package com.iso.dashboard.service;
 
 import com.iso.dashboard.dao.TaskOrgDAO;
 import com.iso.dashboard.dto.ResultDTO;
-import com.iso.dashboard.dto.TaskOrg;
+import com.iso.dashboard.dto.CTask;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -25,19 +26,19 @@ public class TaskOrgMngService {
         return service;
     }
 
-    public ResultDTO addTaskOrg(TaskOrg p) {
+    public ResultDTO addTaskOrg(CTask p) {
         return TaskOrgDAO.getInstance().addTaskOrg(p);
     }
 
-    public ResultDTO updateTaskOrg(TaskOrg p) {
+    public ResultDTO updateTaskOrg(CTask p) {
         return TaskOrgDAO.getInstance().updateTaskOrg(p);
     }
 
-    public List<TaskOrg> listTaskOrg(String id) {
-        return TaskOrgDAO.getInstance().listTaskOrg(id);
+    public List<CTask> listTaskOrg(String id, String parentTaskId) {
+        return TaskOrgDAO.getInstance().listTaskOrg(id, parentTaskId);
     }
 
-    public TaskOrg getTaskOrgById(String id) {
+    public CTask getTaskOrgById(String id) {
         return TaskOrgDAO.getInstance().getTaskOrgById(String.valueOf(id));
     }
 
@@ -45,4 +46,15 @@ public class TaskOrgMngService {
         return TaskOrgDAO.getInstance().removeTaskOrg(id);
     }
 
+    public List<CTask> listTaskByCondition(Map<Object, Object> map) {
+        return TaskOrgDAO.getInstance().getByCondition(map);
+    }
+
+    public List<CTask> listTaskOrg(CTask task) {
+        return TaskOrgDAO.getInstance().listTaskOrg(task);
+    }
+    
+    public List<CTask> getTasksByName(String taskName, String departmentId){
+        return TaskOrgDAO.getInstance().listTaskByName(taskName, departmentId);
+    }
 }

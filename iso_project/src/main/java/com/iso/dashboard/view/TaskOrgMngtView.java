@@ -5,6 +5,7 @@
  */
 package com.iso.dashboard.view;
 
+import com.iso.dashboard.component.CustomGrid;
 import com.iso.dashboard.component.CustomPageTable;
 import com.iso.dashboard.controller.TaskOrgMngtController;
 import com.iso.dashboard.dto.Organization;
@@ -12,6 +13,7 @@ import com.iso.dashboard.ui.OrgTreeSearchUI;
 import com.iso.dashboard.utils.BundleUtils;
 import com.iso.dashboard.utils.Constants;
 import com.iso.dashboard.utils.ISOIcons;
+import com.vaadin.annotations.JavaScript;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
@@ -26,6 +28,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Tree;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import java.util.ArrayList;
@@ -37,6 +40,7 @@ import java.util.Map;
  *
  * @author VIET_BROTHER
  */
+@JavaScript({"jquery.min.js","bootstrap.min.js"})
 public class TaskOrgMngtView extends Panel implements View {
 
     public List<Organization> lstData = new ArrayList<>();
@@ -49,9 +53,11 @@ public class TaskOrgMngtView extends Panel implements View {
 
     private Tree orgTree;
     boolean isViewTree;
-    private CustomPageTable pagedTable;
+//    private CustomPageTable pagedTable;
+    private CustomGrid pagedTable;
 
     public TaskOrgMngtView() {
+        UI.getCurrent().setPollInterval(1000);
         addStyleName(ValoTheme.PANEL_BORDERLESS);
         setSizeFull();
         VerticalLayout root = new VerticalLayout();
@@ -69,7 +75,7 @@ public class TaskOrgMngtView extends Panel implements View {
 //        addComponent(new Trees());
         tabSheet.addComponent(root);
 
-        root.addComponent(new OrgTreeSearchUI("don vi"));
+        //root.addComponent(new OrgTreeSearchUI("don vi"));
 //        root.addComponent(buildPagedTableTab());
         root.addComponent(buildHeader());
         root.addComponent(content);
@@ -85,21 +91,29 @@ public class TaskOrgMngtView extends Panel implements View {
         headerLayout.addStyleName("profile-form");
 
         // btnHide
+        isViewTree = true;
         btnHideTree = new Button();
         btnHideTree.setWidth(Constants.STYLE_CONF.AUTO_VALUE);
         btnHideTree.setHeight(Constants.STYLE_CONF.AUTO_VALUE);
-        btnHideTree.setIcon(FontAwesome.ARROW_CIRCLE_O_RIGHT);
-        btnHideTree.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        btnHideTree.setIcon(FontAwesome.ARROW_CIRCLE_O_LEFT);
+//        btnHideTree.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        btnHideTree.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        btnHideTree.addStyleName(ValoTheme.BUTTON_SMALL);
+        btnHideTree.setDescription(BundleUtils.getString("common.collspan"));
+        btnHideTree.setCaption(BundleUtils.getString("common.collspan"));
         btnHideTree.addClickListener(new Button.ClickListener() {
 
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                isViewTree = !isViewTree;
                 if (isViewTree) {
-                    btnHideTree.setIcon(FontAwesome.ARROW_CIRCLE_O_RIGHT);
-                } else {
                     btnHideTree.setIcon(FontAwesome.ARROW_CIRCLE_O_LEFT);
+                    btnHideTree.setDescription(BundleUtils.getString("common.expand"));
+                    btnHideTree.setCaption(BundleUtils.getString("common.expand"));
+                } else {
+                    btnHideTree.setIcon(FontAwesome.ARROW_CIRCLE_O_RIGHT);
+                    btnHideTree.setCaption(BundleUtils.getString("common.collspan"));
                 }
+                isViewTree = !isViewTree;
                 orgTree.setVisible(isViewTree);
             }
         });
@@ -118,7 +132,9 @@ public class TaskOrgMngtView extends Panel implements View {
         btnSearch.setIcon(ISOIcons.SEARCH);
         btnSearch.setWidth(Constants.STYLE_CONF.AUTO_VALUE);
         btnSearch.setHeight(Constants.STYLE_CONF.AUTO_VALUE);
-        btnSearch.setStyleName(ValoTheme.BUTTON_PRIMARY);
+//        btnSearch.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        btnSearch.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        btnSearch.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
 
         // btnAdd
         btnAdd = new Button();
@@ -126,13 +142,15 @@ public class TaskOrgMngtView extends Panel implements View {
         btnAdd.setWidth(Constants.STYLE_CONF.AUTO_VALUE);
         btnAdd.setHeight(Constants.STYLE_CONF.AUTO_VALUE);
         btnAdd.setIcon(ISOIcons.ADD);
+        btnAdd.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        btnAdd.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
 
         headerPanel.addComponent(txtTaskName);
         headerPanel.addComponent(btnSearch);
         headerPanel.addComponent(btnAdd);
 
         headerLayout.addComponent(btnHideTree);
-        headerLayout.setExpandRatio(btnHideTree, 5.0f);
+        headerLayout.setExpandRatio(btnHideTree, 4.0f);
         headerLayout.setComponentAlignment(btnHideTree, Alignment.TOP_LEFT);
         headerLayout.addComponent(headerPanel);
         headerLayout.setComponentAlignment(headerPanel, Alignment.TOP_RIGHT);
@@ -154,16 +172,15 @@ public class TaskOrgMngtView extends Panel implements View {
         orgTree.setCaption(BundleUtils.getString("orgMngt.tree"));
         contentLayout.addComponent(orgTree);
         contentLayout.setComponentAlignment(orgTree, Alignment.MIDDLE_LEFT);
-        contentLayout.setExpandRatio(orgTree, 3.0f);
+        contentLayout.setExpandRatio(orgTree, 2.5f);
 
         VerticalLayout tableLayout = new VerticalLayout();
         tableLayout.setSizeFull();
-        pagedTable = new CustomPageTable(
-                BundleUtils.getString("task.list"));
+        pagedTable = new CustomGrid();
         tableLayout.addComponent(pagedTable);
         contentLayout.addComponent(tableLayout);
         contentLayout.setComponentAlignment(tableLayout, Alignment.MIDDLE_RIGHT);
-        contentLayout.setExpandRatio(tableLayout, 7.0f);
+        contentLayout.setExpandRatio(tableLayout, 7.5f);
 
 
         contenPanel.addComponent(contentLayout);
@@ -223,11 +240,11 @@ public class TaskOrgMngtView extends Panel implements View {
         this.isViewTree = isViewTree;
     }
 
-    public CustomPageTable getPagedTable() {
+    public CustomGrid getPagedTable() {
         return pagedTable;
     }
 
-    public void setPagedTable(CustomPageTable pagedTable) {
+    public void setPagedTable(CustomGrid pagedTable) {
         this.pagedTable = pagedTable;
     }
 
